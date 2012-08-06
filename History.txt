@@ -1,7 +1,12 @@
+== 0.1.1 / 2012-08-07
+
+* [FIXED] DayOne constants are now `attr_accessors` - set them yourself if you wish!
+
 == 0.1.0 / 2012-08-06
 
 * Added binary
 * Support for DayOne locations
+* Uploaded to github!
 
 == 0.0.1 / 2012-08-05
 

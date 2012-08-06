@@ -25,6 +25,7 @@ Requirements
 ------------
 
 * You should probably have DayOne installed so you can actually create some DayOne entries.
+* Access to `uuidgen` in your PATH (rb-dayone will freak out otherwise)
 
 Install
 -------

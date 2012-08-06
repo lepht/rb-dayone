@@ -2,20 +2,41 @@ require 'time'
 
 # This module contains all classes used in the DayOne module
 module DayOne
-  DAYONE_FOLDER = File.join(ENV['HOME'],'.rb-dayone') #:nodoc:
+  class << self
+    # This is where all DayOne-relevant information is stored.
+    # Set by default to ~/.rb-dayone
+    attr_accessor :dayone_folder
   
-  # Stored in ~/.rb-dayone/journal_location, this file
-  # tells us where DayOne's journal is kept
-  LOCATION_FILE = File.join(DAYONE_FOLDER, 'journal_location')
-  
-  if File.exists?(LOCATION_FILE)
-    # This is the actual location of the DayOne Journal file
-    JOURNAL_LOCATION = File.read(LOCATION_FILE)
-  else
-    puts "Error: DayOne journal file has not been located."
-    puts "Please set this using the command `dayone --set <PATH>`"
-    puts "before continuing."
-    exit 1
+    # This is where your DayOne Journal is kept. Modify either
+    # by directly modifying the ~/.rb-dayone/location file
+    # (not recommended) or by running `dayone --set location`
+    # (recommended)
+    def journal_location
+      @journal_location ||= File.read(journal_file)
+    end
+    
+    # Error-checking method. Ensures that the journal location
+    # file exists.
+    def journal_location_exists?
+      File.exists? journal_file
+    end
+    
+    private
+    
+    # The journal file location
+    def journal_file
+      @journal_file ||= File.join(dayone_folder, 'location')
+    end
+  end
+end
+
+DayOne::dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
+
+unless DayOne::journal_location_exists?
+  puts <<-end
+Error: DayOne journal file has not been located.
+Please set this using the command `dayone --set location
+before continuing.
   end
 end
 
