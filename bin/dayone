@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+
+root = File.expand_path('../..', __FILE__)
+require File.join(root, %w[lib rb-dayone])
+
+# Put your code here
+if ARGV[0] == '--set'
+  new_dayone_location = File.expand_path(ARGV[1])
+  dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
+  FileUtils::mkdir_p dayone_folder
+  File.open(File.join(dayone_folder, 'journal_location'),'w'){ |io| io.puts dayone_folder }
+  puts "DayOne journal now located at: #{new_dayone_location}"
+end
+  
+
