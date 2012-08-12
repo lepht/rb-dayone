@@ -1,14 +1,25 @@
-rb-dayone
-<<<<<<< HEAD
-===========
+# rb-dayone
 
 A means to create DayOne entries in ruby.
 
 Examples
 --------
 
+You can create an entry pretty simply, by passing in your entry text:
+
   e = DayOne::Entry.new "# Hello, world!"
+  
+You can also set up other values via a hash:
+
+  e = DayOne::Entry.new "I totally posted this an hour ago", creation_date: Time.now-3600
+
+Otherwise, you can set values using simple accessor methods, as you'd expect:
+
+  e = DayOne::Entry.new "I need to remember this."
   e.starred = true
+
+When you're ready to save your entry, just run the `create!` method:
+
   e.create!
 
 Install
@@ -26,6 +37,7 @@ Roadmap
 
 * Image support
 * Location support?
+* Auto-location detection
 
 License
 -------
@@ -50,8 +62,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-=======
-=========
-
-A ruby library for creating (and, one day, editing and removing) DayOne.app entries
->>>>>>> d4606a817c5f5757f6b5e4c996d7f61cb0d023b1

@@ -5,12 +5,7 @@ Gem::Specification.new do |s|
   s.version = File.read('version.txt')
   
   s.summary = "Create DayOne journal entries in ruby."
-  s.description = <<-end
-  require 'rb-dayone'
-  e = DayOne::Entry.new "Hello, world!"
-  e.starred = true
-  e.create!
-  end
+  s.description = "Create [DayOne](http://www.dayoneapp.com) journal entries simply and easily in ruby. Currently only supports text entries, image entries to come."
   
   s.author = 'Jan-Yves Ruzicka'
   s.email = 'janyves.ruzicka@gmail.com'
@@ -31,8 +26,6 @@ Thank you for installing rb-dayone!
 To finish setup, run `dayone --set location <location>` to specify where your DayOne journal is stored.
 #{'-'*80}
   end
-  
-  
   
   s.add_runtime_dependency 'builder', '~> 2.0'
 end

@@ -1,3 +1,7 @@
+== 0.1.5 / 2012-08-12
+
+* [FIXED] Ouch, horrid horrid gemspec and readme. Let's make them prettier.
+
 == 0.1.4 / 2012-08-12
 
 * Added a couple more tests for better coverage
