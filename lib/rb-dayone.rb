@@ -7,6 +7,9 @@ module DayOne
     # This is where all DayOne-relevant information is stored.
     # Set by default to ~/.rb-dayone
     attr_accessor :dayone_folder
+    
+    # The location of the journal file
+    attr_accessor :journal_location
   
     # This is where your DayOne Journal is kept. Modify either
     # by directly modifying the ~/.rb-dayone/location file

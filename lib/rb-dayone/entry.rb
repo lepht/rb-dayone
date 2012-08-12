@@ -70,6 +70,6 @@ class DayOne::Entry
   def create!
     xml = self.to_xml
     file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
-    File.open(file_location,'w'){ |io| io.puts xml }
+    File.open(file_location,'w'){ |io| io << xml }
   end
 end
