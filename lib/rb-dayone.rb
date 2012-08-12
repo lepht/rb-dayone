@@ -1,4 +1,5 @@
 require 'time'
+require 'builder'
 
 # This module contains all classes used in the DayOne module
 module DayOne
@@ -9,10 +10,9 @@ module DayOne
   
     # This is where your DayOne Journal is kept. Modify either
     # by directly modifying the ~/.rb-dayone/location file
-    # (not recommended) or by running `dayone --set location`
-    # (recommended)
+    # or by running `dayone --set location`
     def journal_location
-      @journal_location ||= File.read(journal_file)
+      @journal_location ||= File.read(journal_file).strip
     end
     
     # Error-checking method. Ensures that the journal location
@@ -39,10 +39,3 @@ Please set this using the command `dayone --set location
 before continuing.
   end
 end
-
-# :stopdoc:
-
-LIBPATH = File.dirname(File.expand_path(__FILE__))
-Dir[File.join(LIBPATH, 'rb-dayone', '*.rb')].each{ |f| require f }
-
-# :startdoc:

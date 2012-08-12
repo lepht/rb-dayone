@@ -1,17 +1,21 @@
+gem_title = 'rb-dayone'
 
-begin
-  require 'bones'
-rescue LoadError
-  abort '### Please install the "bones" gem ###'
+task :build do
+  specfile = "#{gem_title}.gemspec"
+  puts `gem build '#{specfile}'`
+  
+  gem_file = Dir["#{gem_title}-*.gem"]
+  gem_file.each do |f|
+    puts `mv '#{f}' pkg`
+  end
 end
 
-task :default => 'test:run'
-task 'gem:release' => 'test:run'
+task :install do
+  pkg = Dir['pkg/*.gem'].sort[-1]
+  puts `gem install #{pkg}`
+end
 
-Bones {
-  name     'rb-dayone'
-  authors  'Jan-Yves Ruzicka'
-  email    'janyves.ruzicka@gmail.com'
-  url      'http://www.rubygems.org/rb-dayone'
-}
+task :go => [:build, :install] do
+end
 
+task :default => :go

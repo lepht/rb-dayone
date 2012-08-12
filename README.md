@@ -2,30 +2,14 @@ rb-dayone
 <<<<<<< HEAD
 ===========
 
-A means to create DayOne entries (skipping the command line) in ruby.
-
-Features
---------
-
-* Simple syntax
-* No dependencies outside of having DayOne installed
-* You don't need to bother with XML yourself?
+A means to create DayOne entries in ruby.
 
 Examples
 --------
 
-  entry = DayOne::Entry.new
-  entry.entry_text = <<-end
-  Here is my entry, isn't it pretty?
-  end
-  entry.starred = true
-  entry.create!
-
-Requirements
-------------
-
-* You should probably have DayOne installed so you can actually create some DayOne entries.
-* Access to `uuidgen` in your PATH (rb-dayone will freak out otherwise)
+  e = DayOne::Entry.new "# Hello, world!"
+  e.starred = true
+  e.create!
 
 Install
 -------
@@ -40,9 +24,8 @@ Original author: Jan-Yves Ruzicka
 Roadmap
 -------
 
-* Actually working!
-* Binary with the ability to set DayOne location
 * Image support
+* Location support?
 
 License
 -------

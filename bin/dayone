@@ -4,28 +4,31 @@ require 'fileutils'
 USAGE = <<-end
 Usage:
 dayone --set location <PATH>
-
-No other usage yet
 end
 
-root = File.expand_path('../..', __FILE__)
-require File.join(root, %w[lib rb-dayone])
-
-# Put your code here
-if ARGV[0] == '--set'
-  key = ARGV[1]
-  value = ARGV[2]
-  if key != 'location'
-    puts USAGE
-    exit 1
-  else
-    new_dayone_location = File.expand_path(ARGV[2])
-    dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
-    FileUtils::mkdir_p dayone_folder
-    File.open(File.join(dayone_folder, 'location'),'w'){ |io| io.puts dayone_folder }
-    puts "DayOne journal now located at: #{new_dayone_location}"
-  end
-else
+def usage
   puts USAGE
   exit 1
+end
+
+# Put your code here
+case ARGV[0]
+when '--set'
+  case ARGV[1]
+  when 'location'
+    # Make sure location store folder exists
+    dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
+    FileUtils::mkdir_p dayone_folder
+    
+    # Put our location in it
+    new_dayone_location = File.expand_path(ARGV[2])
+    File.open(File.join(dayone_folder, 'location'),'w'){ |io| io.puts new_dayone_location }
+    
+    # Let the user know
+    puts "DayOne journal now located at: #{new_dayone_location}"
+  else
+    usage
+  end
+else
+  usage
 end
