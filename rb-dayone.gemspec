@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   
   s.author = 'Jan-Yves Ruzicka'
   s.email = 'janyves.ruzicka@gmail.com'
-  s.homepage = 'http://www.rubygems.org/rb-dayone'
+  s.homepage = 'https://github.com/jyruzicka/rb-dayone'
   
   s.files = Dir['lib/**.*.rb'] +
             Dir['bin/*'] +
