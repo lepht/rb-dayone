@@ -1,34 +1,38 @@
 #!/usr/bin/env ruby
 require 'fileutils'
+require 'commander/import'
 
-USAGE = <<-end
-Usage:
-dayone --set location <PATH>
-end
+program :name, 'dayone'
+program :version, File.read(File.join(File.dirname(__FILE__),'../version.txt'))
+program :description, "Command line interface for the rb-dayone gem"
 
-def usage
-  puts USAGE
-  exit 1
-end
+dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
+dayone_location_file = File.join(dayone_folder, 'location')
 
-# Put your code here
-case ARGV[0]
-when '--set'
-  case ARGV[1]
-  when 'location'
-    # Make sure location store folder exists
-    dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
-    FileUtils::mkdir_p dayone_folder
-    
-    # Put our location in it
-    new_dayone_location = File.expand_path(ARGV[2])
-    File.open(File.join(dayone_folder, 'location'),'w'){ |io| io.puts new_dayone_location }
-    
-    # Let the user know
-    puts "DayOne journal now located at: #{new_dayone_location}"
-  else
-    usage
+command :set do |c|
+  c.syntax = "set [key value]"
+  c.description = "Show or set program settings."
+  c.summary = "If sent without arguments, this will show all program settings. If sent with two arguments, this will set <key> to <value>"
+  
+  c.action do |args|
+    case args.size
+    when 0
+      puts "location: #{File.read(dayone_location_file)}"
+    when 2
+      key, val = *args
+      case key
+      when 'location'
+        new_dayone_location = File.expand_path(val)
+        File.open(dayone_location_file,'w'){ |io| io << new_dayone_location }
+        puts "#{key}: #{new_dayone_location}"
+      else
+        puts "Key #{key} not recognised"
+        exit 1
+      end
+    else
+      puts c.syntax
+      puts c.summary
+      exit 1
+    end
   end
-else
-  usage
 end
