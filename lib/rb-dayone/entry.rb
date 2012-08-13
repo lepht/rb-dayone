@@ -10,7 +10,8 @@ class DayOne::Entry
   # Whether the entry has been starred
   attr_accessor :starred
   
-  DOCTYPE = 'plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"' # :nodoc:
+  # The PList doctype, used for XML export
+  DOCTYPE = 'plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"'
   
   # Initialise a journal entry, ready for inclusion into your journal
   # @param [String] entry_text the body text of the journal entry
