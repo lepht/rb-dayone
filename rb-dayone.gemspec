@@ -11,10 +11,7 @@ Gem::Specification.new do |s|
   s.email = 'janyves.ruzicka@gmail.com'
   s.homepage = 'https://github.com/jyruzicka/rb-dayone'
   
-  s.files = Dir['lib/**.*.rb'] +
-            Dir['bin/*'] +
-            Dir['[A-Z]*'] + 
-            Dir['spec/**/*']
+  s.files = File.read('Manifest').split("\n")
   s.require_paths << 'lib'
   s.bindir = 'bin'
   s.executables << 'dayone'

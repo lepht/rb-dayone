@@ -1,6 +1,8 @@
 == 0.1.6 / 2012-08-13
 
 * Updated documentation so YARD would generate nice rdocs
+* dayone binary now uses the Commander gem
+* 
 
 == 0.1.5 / 2012-08-12
 
