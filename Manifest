@@ -1,6 +1,6 @@
 bin/dayone
 Gemfile
-History.txt
+History.rdoc
 lib/rb-dayone.rb
 lib/rb-dayone/entry.rb
 Manifest
