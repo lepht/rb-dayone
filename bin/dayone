@@ -36,3 +36,25 @@ command :set do |c|
     end
   end
 end
+
+command :add do |c|
+  c.syntax = "add [--text=\"Entry text\"] [--starred]"
+  c.description = "Add an entry to your DayOne journal."
+  c.summary = <<-end
+Add an entry to your DayOne journal. By default will add an unstarred entry - use the --starred flag to change this.
+
+If you don't specify the --text tag, it will read text from STDIN and use this as the journal entry.
+  end
+  
+  c.option "--text STRING", String, "Specify the journal entry text. If not specified, will read from STDIN"
+  c.option "--starred", "Mark the entry starrd"
+
+  c.action do |args, opts|
+    require 'rb-dayone'
+    entry_text = opts.text || $stdin.read.strip
+    starred = opts.starred
+    
+    entry = DayOne::Entry.new entry_text, starred:starred
+    entry.create!
+  end
+end
