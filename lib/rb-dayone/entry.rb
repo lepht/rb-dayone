@@ -1,13 +1,10 @@
-# An entry is any entry for DayOne.
-# At this stage you can't edit, modify,
-# view or delete existing entries, just
-# create new entries.
+# A text-only journal entry for DayOne.
 class DayOne::Entry
 
-  # The date the journal entry will be created with
+  # The date of the journal entry
   attr_accessor :creation_date
   
-  # The text of the journal itself (markdown allowed)
+  # The journal entry's body text
   attr_accessor :entry_text
   
   # Whether the entry has been starred
@@ -15,9 +12,10 @@ class DayOne::Entry
   
   DOCTYPE = 'plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"' # :nodoc:
   
-  # Make the new entry. Note that the entry won't be inserted into your journal until you
-  # call DayOne#create!
-  # DayOne.new takes a string for the journal entry, and a hash that may set any attributes.
+  # Initialise a journal entry, ready for inclusion into your journal
+  # @param [String] entry_text the body text of the journal entry
+  # @param [Hash] hsh a hash of options - allowed keys include `:creation_date`, `:entry_text` and `:starred`, others are ignored
+  # @return [DayOne::Entry] the journal entry
   def initialize entry_text='', hsh={}
     # Some defaults
     @creation_date = Time.now
@@ -32,12 +30,13 @@ class DayOne::Entry
   
   # Generate (or retrieve, if previously generatred) a UUID
   # for this entry.
+  # @return [String] the entry's UUID
   def uuid
     @uuid ||= `uuidgen`.gsub('-','').strip
   end
   
-  # Convert an entry to xml, using
-  # DayOne::SimpleXML
+  # Convert an entry to XML.
+  # @return [String] the entry as XML
   def to_xml
     builder = Builder::XmlMarkup.new
     builder.instruct!                     # Basic xml tag
@@ -67,9 +66,11 @@ class DayOne::Entry
   # Create a .doentry file with this entry.
   # This uses the #to_xml method to generate
   # the entry proper.
+  # @return [Boolean] true if the operation was successful.
   def create!
     xml = self.to_xml
     file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
     File.open(file_location,'w'){ |io| io << xml }
+    return true
   end
 end
