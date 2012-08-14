@@ -1,3 +1,8 @@
+== 0.1.7 / 
+
+* The dayone binary can now add entries to your journal
+* [FIXED] Managed to break the gem's include in 0.1.6, and because I'm a terrible amateur at all this, didn't pick up on it.
+
 == 0.1.6 / 2012-08-13
 
 * Updated documentation so YARD would generate nice rdocs

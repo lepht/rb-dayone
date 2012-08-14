@@ -1,5 +1,14 @@
 gem_title = 'rb-dayone'
 
+def pkg
+  p = Dir['pkg/*.gem'].sort[-1]
+  if p.nil?
+    $stderr.puts "ERROR: Can't find pkg file."
+  else
+    p
+  end
+end
+
 task :build do
   specfile = "#{gem_title}.gemspec"
   puts `gem build '#{specfile}'`
@@ -10,12 +19,16 @@ task :build do
   end
 end
 
-task :install do
-  pkg = Dir['pkg/*.gem'].sort[-1]
+task :install => [:build] do
   puts `gem install #{pkg}`
 end
 
-task :go => [:build, :install] do
+task :push => [:build] do
+  puts `gem push #{pkg}`
 end
 
-task :default => :go
+task :spec do
+  puts `rspec`
+end
+
+task :default => :spec

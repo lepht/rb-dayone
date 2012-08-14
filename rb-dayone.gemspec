@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 #{'-'*80}
 Thank you for installing rb-dayone!
 
-To finish setup, run `dayone --set location <location>` to specify where your DayOne journal is stored.
+To finish setup, run `dayone set location <location>` to specify where your DayOne journal is stored.
 #{'-'*80}
   end
   

@@ -1,9 +1,8 @@
 # rb-dayone
 
-A means to create DayOne entries in ruby.
+A means to create DayOne entries in ruby. Also, my first public ruby gem!
 
-Examples
---------
+## Examples
 
 You can create an entry pretty simply, by passing in your entry text:
 
@@ -22,22 +21,27 @@ When you're ready to save your entry, just run the `create!` method:
 
   e.create!
 
-Install
--------
+Alternatively, run from the command line:
+
+  dayone add --text "#Hello, world" --starred
+
+For more information on what you can do from the command line:
+
+  dayone --help
+
+## Install
 
 `gem install rb-dayone`
 
-Author
-------
+## Author
 
-Original author: Jan-Yves Ruzicka
+Original author: Jan-Yves Ruzicka (@akchizar). Get in touch [via email](mailto:janyves.ruzicka@gmail.com).
 
-Roadmap
--------
+## To do
 
 * Image support
 * Location support?
-* Auto-location detection
+* Auto-journal detection
 
 License
 -------

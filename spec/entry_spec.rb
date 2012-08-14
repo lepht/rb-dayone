@@ -7,7 +7,7 @@ describe DayOne::Entry do
   
   after :all do
     Dir['spec/entries/*.doentry'].each{ |f| FileUtils.rm(f) }
-    FileUtils.rm('spec/entries')
+    FileUtils.rmdir('spec/entries')
   end
   
   describe "#to_xml" do

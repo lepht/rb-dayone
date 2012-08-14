@@ -46,3 +46,5 @@ Please set this using the command `dayone --set location
 before continuing.
   end
 end
+
+require 'rb-dayone/entry'
