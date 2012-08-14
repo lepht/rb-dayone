@@ -12,7 +12,11 @@ dayone_location_file = File.join(dayone_folder, 'location')
 command :set do |c|
   c.syntax = "set [key value]"
   c.description = "Show or set program settings."
-  c.summary = "If sent without arguments, this will show all program settings. If sent with two arguments, this will set <key> to <value>"
+  c.summary = <<-end
+If sent without arguments, this will show all program settings. If sent with two arguments, this will set <key> to <value>.
+  
+Note: setting location to "auto" will set it from the DayOne plist file.
+  end
   
   c.action do |args|
     case args.size

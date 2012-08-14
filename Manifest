@@ -3,9 +3,16 @@ Gemfile
 History.rdoc
 lib/rb-dayone.rb
 lib/rb-dayone/entry.rb
+lib/rb-dayone/plist_reader.rb
 Manifest
 rb-dayone.gemspec
 README.md
+spec/dayone_spec.rb
 spec/entry_spec.rb
+spec/locations/location-auto/location
+spec/locations/location-specified/location
+spec/locations/location-unspecified
 spec/spec_helper.rb
+spec/plist_reader_spec.rb
+spec/sample.plist
 version.txt

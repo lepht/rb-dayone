@@ -16,13 +16,7 @@ Gem::Specification.new do |s|
   s.bindir = 'bin'
   s.executables << 'dayone'
   s.extra_rdoc_files = ['README.md']
-  s.post_install_message = <<-end
-#{'-'*80}
-Thank you for installing rb-dayone!
-
-To finish setup, run `dayone set location <location>` to specify where your DayOne journal is stored.
-#{'-'*80}
-  end
   
   s.add_runtime_dependency 'builder', '~> 2.0'
+  s.add_runtime_dependency 'commander', '~> 4.1.2'
 end

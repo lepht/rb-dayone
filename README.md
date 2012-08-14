@@ -41,7 +41,6 @@ Original author: Jan-Yves Ruzicka (@akchizar). Get in touch [via email](mailto:j
 
 * Image support
 * Location support?
-* Auto-journal detection
 
 License
 -------

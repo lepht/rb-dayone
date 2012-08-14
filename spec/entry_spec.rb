@@ -2,9 +2,6 @@ require './spec/spec_helper'
 require 'fileutils'
 
 describe DayOne::Entry do
-  
-  let(:entry){ DayOne::Entry.new }
-  
   after :all do
     Dir['spec/entries/*.doentry'].each{ |f| FileUtils.rm(f) }
     FileUtils.rmdir('spec/entries')
@@ -12,7 +9,7 @@ describe DayOne::Entry do
   
   describe "#to_xml" do
     it "should give a default entry" do
-      e = entry.to_xml
+      e = subject.to_xml
       e.should match %r|<key>Entry Text</key>\s*<string></string>|
       e.should match %r|<key>Starred</key>\s*<false/>|
     end
@@ -34,7 +31,7 @@ describe DayOne::Entry do
       DayOne::journal_location = 'spec'
       FileUtils::mkdir_p 'spec/entries'
       
-      e = entry
+      e = subject
       e.entry_text = "Hello, world!"
       e.create!
       

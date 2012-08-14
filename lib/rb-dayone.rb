@@ -9,22 +9,37 @@ module DayOne
     # Set by default to ~/.rb-dayone
     attr_accessor :dayone_folder
     
-    # The location of the journal file
-    attr_accessor :journal_location
+    # The location of the DayOne journal file.
+    attr_writer :journal_location
+    
+    # An interface to the propertylist reader
+    attr_accessor :plist_reader
   
-    # This is where your DayOne Journal is kept. Modify either
-    # by directly modifying the ~/.rb-dayone/location file
-    # or by running `dayone --set location`
-    # @return [String] the location of DayOne's journal file.
+    # The location of the DayOne journal file.
+    # If the location is set to "auto" or is non-existant,
+    # will set from the DayOne plist (See +auto_journal_location+).
+    # @return [String] the DayOne journal location
     def journal_location
-      @journal_location ||= File.read(journal_file).strip
+      if !@journal_location 
+        if File.exists?(journal_file)
+          contents = File.read(journal_file)
+          @journal_location = if contents == 'auto'
+            auto_journal_location
+          else
+            contents
+          end
+        else
+          @journal_location = auto_journal_location
+        end
+      end
+      @journal_location
     end
     
-    # Error-checking method. Ensures that the journal location
-    # file exists.
-    # @return [Boolean] whether or not the journal location file exists
-    def journal_location_exists?
-      File.exists? journal_file
+    # The location of the DayOne journal file as determined by
+    # the DayOne plist file stored in +~/Library/Preferences+.
+    # @return [String] the DayONe journal location
+    def auto_journal_location
+      @auto_journal_location ||= plist_reader['NSNavLastRootDirectory']
     end
     
     private
@@ -37,14 +52,9 @@ module DayOne
   end
 end
 
+lib_root = File.dirname(__FILE__)
+Dir[File.join(lib_root, "rb-dayone", "*.rb")].each{ |f| require f }
+
+# Default values
 DayOne::dayone_folder = File.join(ENV['HOME'], '.rb-dayone')
-
-unless DayOne::journal_location_exists?
-  puts <<-end
-Error: DayOne journal file has not been located.
-Please set this using the command `dayone --set location
-before continuing.
-  end
-end
-
-require 'rb-dayone/entry'
+DayOne::plist_reader = DayOne::PlistReader.new
