@@ -6,32 +6,32 @@ A means to create DayOne entries in ruby. Also, my first public ruby gem!
 
 You can create an entry pretty simply, by passing in your entry text:
 
-  e = DayOne::Entry.new "# Hello, world!"
+    e = DayOne::Entry.new "# Hello, world!"
   
 You can also set up other values via a hash:
 
-  e = DayOne::Entry.new "I totally posted this an hour ago", creation_date: Time.now-3600
+    e = DayOne::Entry.new "I totally posted this an hour ago", creation_date: Time.now-3600
 
 Otherwise, you can set values using simple accessor methods, as you'd expect:
 
-  e = DayOne::Entry.new "I need to remember this."
-  e.starred = true
+    e = DayOne::Entry.new "I need to remember this."
+    e.starred = true
 
 When you're ready to save your entry, just run the `create!` method:
 
-  e.create!
+    e.create!
 
 Alternatively, run from the command line:
 
-  dayone add --text "#Hello, world" --starred
+    dayone add --text "#Hello, world" --starred
 
 For more information on what you can do from the command line:
 
-  dayone --help
+    dayone --help
 
 ## Install
 
-`gem install rb-dayone`
+    gem install rb-dayone
 
 ## Author
 
