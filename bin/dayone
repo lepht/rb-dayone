@@ -26,7 +26,7 @@ Note: setting location to "auto" will set it from the DayOne plist file.
       key, val = *args
       case key
       when 'location'
-        new_dayone_location = File.expand_path(val)
+        new_dayone_location = (val == 'auto' ? 'auto' : File.expand_path(val))
         File.open(dayone_location_file,'w'){ |io| io << new_dayone_location }
         puts "#{key}: #{new_dayone_location}"
       else
