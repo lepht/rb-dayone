@@ -20,13 +20,13 @@ describe DayOne do
     it "should return a default value when +location+ is 'auto'" do
       DayOne.plist_reader = {'NSNavLastRootDirectory' => 'foo'}
       DayOne::dayone_folder = location('auto')
-      DayOne::journal_location.should == 'foo'
+      DayOne::journal_location.should == File.expand_path('foo')
     end
     
     it "should return a default value if +location+ doesn't exist" do
       DayOne.plist_reader = {'NSNavLastRootDirectory' => 'foo'}
       DayOne::dayone_folder = location('unspecified')
-      DayOne::journal_location.should == 'foo'
+      DayOne::journal_location.should == File.expand_path('foo')
     end
   end
 end
