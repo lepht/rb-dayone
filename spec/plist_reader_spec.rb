@@ -13,7 +13,7 @@ describe DayOne::PlistReader do
     end
     
     it "should correctly parse binary plists" do
-      reader = DayOne::PlistReader.new(File.join(File.dirname(__FILE__),'sample.plist'))
+      reader = DayOne::PlistReader.new(File.join(File.dirname(__FILE__),'data', 'sample.plist'))
       reader['foo'].should == 'bar'
     end
   end
