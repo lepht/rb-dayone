@@ -9,7 +9,7 @@ describe DayOne do
     end
     
     def location str
-      File.join(File.dirname(__FILE__),"locations", "location-#{str}")
+      File.join(File.dirname(__FILE__),"data", "locations", "location-#{str}")
     end
     
     it "should return the value given by the +location+ file" do
