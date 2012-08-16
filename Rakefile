@@ -11,24 +11,24 @@ end
 
 task :build do
   specfile = "#{gem_title}.gemspec"
-  puts `gem build '#{specfile}'`
+  sh "gem build #{specfile}'"
   
   gem_file = Dir["#{gem_title}-*.gem"]
   gem_file.each do |f|
-    puts `mv '#{f}' pkg`
+    sh "mv '#{f}' pkg"
   end
 end
 
 task :install => [:build] do
-  puts `gem install #{pkg}`
+  sh "gem install #{pkg}"
 end
 
 task :push => [:build] do
-  puts `gem push #{pkg}`
+  sh "gem push #{pkg}"
 end
 
 task :spec do
-  puts `rspec`
+  sh "rspec"
 end
 
 task :default => :spec
