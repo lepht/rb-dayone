@@ -5,7 +5,7 @@ lib/rb-dayone.rb
 lib/rb-dayone/entry.rb
 lib/rb-dayone/entry_importer.rb
 lib/rb-dayone/plist_reader.rb
-lib/rb-datone/search.rb
+lib/rb-dayone/search.rb
 Manifest
 Rakefile
 rb-dayone.gemspec
