@@ -2,8 +2,18 @@
 # Create this object with Search.new. Give it some parameters to search for, then
 # simple use Search#[] to access results.
 class DayOne::Search
-  attr_accessor :entry_text, :starred
   
+  # The entry must include this text
+  attr_accessor :entry_text
+  
+  # The entry must be starred
+  attr_accessor :starred
+  
+  # Initialize the search. Currently you can only search by entry text and starred status,
+  # but both of these can be passed in via hash.
+  # @param [Hash] hash a hash of search criteria, including:
+  #   * +entry_text+: Text that the entry must include
+  #   * +starred+: whether the entry is starred or not
   def initialize hash={}
     @entry_text = ''
     hash.each do |k,v|
@@ -12,6 +22,8 @@ class DayOne::Search
     end
   end
   
+  # Fetch the results by searching. Uses a cached version of the DayOne database.
+  # @return [Array] all entries matching your results
   def results
     if !@results
       @results = []
@@ -25,6 +37,9 @@ class DayOne::Search
     @results
   end
   
+  # Fetches a particular result
+  # @param [Integer] index the index of the result to fetch
+  # @return [DayOne::Entry] the entry
   def [] index
     results[index]
   end
