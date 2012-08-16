@@ -2,9 +2,12 @@ require './spec/spec_helper'
 require 'fileutils'
 
 describe DayOne::Entry do
-  after :all do
-    Dir[spec_data('entries', '*.doentry')].each{ |f| FileUtils.rm(f) }
-    FileUtils.rmdir(spec_data('entries'))
+  before :each do
+    FileUtils::mkdir_p spec_data('working/entries')
+  end
+  
+  after :each do
+    FileUtils::rm_rf spec_data('working')
   end
   
   describe "#to_xml" do
@@ -31,14 +34,13 @@ describe DayOne::Entry do
   describe "#create!" do
     it "should correctly create a .doentry file" do
       
-      DayOne::journal_location = spec_data
-      FileUtils::mkdir_p spec_data('entries')
+      DayOne::journal_location = spec_data('working')
       
       e = subject
       e.entry_text = "Hello, world!"
       e.create!
       
-      file_location = Dir[spec_data('entries', '*.doentry')][0]
+      file_location = Dir[spec_data('working', 'entries', '*.doentry')][0]
       file_location.should_not be_nil
       
       contents = File.read(file_location)

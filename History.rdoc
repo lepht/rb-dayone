@@ -1,3 +1,10 @@
+== 0.3.0 / 
+
+* [FIXED] Fixed several bugs in Builder xml output, including:
+  * Output of trailing <target />
+  * Output of malformed DOCTYPE
+* You can now import existing DayOne entries and search them
+
 == 0.2.0 / 2012-08-14
 
 * Now auto-detects DayOne journal location from your plist file

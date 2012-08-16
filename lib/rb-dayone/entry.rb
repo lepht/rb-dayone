@@ -14,7 +14,7 @@ class DayOne::Entry
   attr_accessor :saved
   
   # The PList doctype, used for XML export
-  DOCTYPE = 'plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"'
+  DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]
   
   # Initialise a journal entry, ready for inclusion into your journal
   # @param [String] entry_text the body text of the journal entry
@@ -48,9 +48,9 @@ class DayOne::Entry
   # Convert an entry to XML.
   # @return [String] the entry as XML
   def to_xml
-    builder = Builder::XmlMarkup.new
+    builder = Builder::XmlMarkup.new(indent:2)
     builder.instruct!                     # Basic xml tag
-    builder.declare! :DOCTYPE, DOCTYPE   # PList doctype
+    builder.declare! DOCTYPE   # PList doctype
     builder.plist(version:1.0) do
       builder.dict do
         builder.key 'Creation Date'
@@ -70,7 +70,7 @@ class DayOne::Entry
         builder.string uuid
       end
     end
-    builder.target
+    builder.target!
   end
   
   # Create a .doentry file with this entry.
