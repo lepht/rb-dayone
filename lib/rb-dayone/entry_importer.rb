@@ -1,4 +1,4 @@
-require 'rexml/document'
+require 'libxml'
 
 # Imports DayOne entries from XML files or plain text
 class DayOne::EntryImporter
@@ -10,10 +10,10 @@ class DayOne::EntryImporter
   attr_accessor :file
   
   # Create a new entry based on a string. To import from a file,
-  # use EntryImporter.from_file
+  # use EntryImporter.from_file.
   # @param [String] data The raw data for the importer to process
   def initialize data
-    @data = data
+    @data = data.gsub('&','&amp;')
   end
   
   # Create a new entry from a file
@@ -37,14 +37,16 @@ class DayOne::EntryImporter
     if !@processed_data
       @processed_data = {}
       begin
-        xml = REXML::Document.new(data)
+        context = LibXML::XML::Parser::Context.string(data)
+        document = LibXML::XML::Parser.new(context).parse
         key = nil
-        xml.root.elements.each('/plist/dict/*') do |elem|
+        
+        document.find('//plist/dict/*').each do |elem|
           case elem.name
           when 'key'
-            key = elem.text
+            key = elem.content
           when 'date'
-            if elem.text =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
+            if elem.content =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
               @processed_data[key] = Time.new($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
             end
           when 'true'
@@ -52,11 +54,11 @@ class DayOne::EntryImporter
           when 'false'
             @processed_data[key] = false
           else
-            @processed_data[key] = elem.text
+            @processed_data[key] = elem.content
           end
         end
-      rescue REXML::ParseException
-        $stderr.puts "#{file ? "File #{file}" : "Data"} was malformed, and could not be read. Skipping."
+      rescue LibXML::XML::Error
+        $stderr.puts "Error parsing #{file ? "file #{file}" : "data"}. Skipping."
         @processed_data = {}
       end
     end

@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   
   s.add_runtime_dependency 'builder', '~> 2.0'
   s.add_runtime_dependency 'commander', '~> 4.1.2'
+  s.add_runtime_dependency 'libxml-ruby', '~> 2.3.3'
 end

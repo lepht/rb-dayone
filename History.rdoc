@@ -1,3 +1,7 @@
+== 0.3.2 / 2012-08-16
+
+* Switched from REXML to LibXML-ruby for XML parsing. Now accepts ampersands in entries, as well as UTF-8. Rejoice!
+
 == 0.3.1 / 2012-08-16
 
 * [FIXED] Minor bugfixes
