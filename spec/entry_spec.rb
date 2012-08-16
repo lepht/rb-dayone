@@ -3,11 +3,14 @@ require 'fileutils'
 
 describe DayOne::Entry do
   after :all do
-    Dir['spec/entries/*.doentry'].each{ |f| FileUtils.rm(f) }
-    FileUtils.rmdir('spec/entries')
+    Dir[spec_data('entries', '*.doentry')].each{ |f| FileUtils.rm(f) }
+    FileUtils.rmdir(spec_data('entries'))
   end
   
   describe "#to_xml" do
+    
+    let(:sample_entry){ DayOne::Entry.new('foo', starred:true) }
+    
     it "should give a default entry" do
       e = subject.to_xml
       e.should match %r|<key>Entry Text</key>\s*<string></string>|
@@ -15,27 +18,27 @@ describe DayOne::Entry do
     end
     
     it "should set from initialize" do
-      e = DayOne::Entry.new 'foo', starred:true
-      e.starred.should be_true
-      e.entry_text.should == 'foo'
+      sample_entry.starred.should be_true
+      sample_entry.entry_text.should == 'foo'
+      sample_entry.should_not be_saved
     end
     
     it "should act properly when starred" do
-      e = DayOne::Entry.new('foo', starred:true).to_xml
-      e.should match %r|<key>Starred</key>\s*<true/>|
+      sample_entry.to_xml.should match %r|<key>Starred</key>\s*<true/>|
     end
   end
   
   describe "#create!" do
     it "should correctly create a .doentry file" do
-      DayOne::journal_location = 'spec'
-      FileUtils::mkdir_p 'spec/entries'
+      
+      DayOne::journal_location = spec_data
+      FileUtils::mkdir_p spec_data('entries')
       
       e = subject
       e.entry_text = "Hello, world!"
       e.create!
       
-      file_location = Dir['spec/entries/*.doentry'][0]
+      file_location = Dir[spec_data('entries', '*.doentry')][0]
       file_location.should_not be_nil
       
       contents = File.read(file_location)

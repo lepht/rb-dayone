@@ -10,6 +10,9 @@ class DayOne::Entry
   # Whether the entry has been starred
   attr_accessor :starred
   
+  # Whether the entry has been saved to file at all.
+  attr_accessor :saved
+  
   # The PList doctype, used for XML export
   DOCTYPE = 'plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"'
   
@@ -22,6 +25,7 @@ class DayOne::Entry
     @creation_date = Time.now
     @starred = false
     @entry_text = entry_text
+    @saved = false
     
     hsh.each do |k,v|
       setter = "#{k}="
@@ -34,6 +38,11 @@ class DayOne::Entry
   # @return [String] the entry's UUID
   def uuid
     @uuid ||= `uuidgen`.gsub('-','').strip
+  end
+  
+  # The same as calling Entry#saved
+  def saved?
+    saved
   end
   
   # Convert an entry to XML.
