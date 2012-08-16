@@ -11,7 +11,7 @@ end
 
 task :build do
   specfile = "#{gem_title}.gemspec"
-  sh "gem build #{specfile}'"
+  sh "gem build '#{specfile}'"
   
   gem_file = Dir["#{gem_title}-*.gem"]
   gem_file.each do |f|
