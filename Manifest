@@ -18,7 +18,7 @@ spec/data/locations/location-specified/location
 spec/data/locations/location-unspecified
 spec/data/sample.doentry
 spec/data/sample.plist
-spec/data/utf8.doentry
+spec/data/utf.doentry
 spec/dayone_spec.rb
 spec/entry_importer_spec.rb
 spec/entry_spec.rb
