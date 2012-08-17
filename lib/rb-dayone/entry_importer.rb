@@ -13,7 +13,7 @@ class DayOne::EntryImporter
   # use EntryImporter.from_file.
   # @param [String] data The raw data for the importer to process
   def initialize data
-    @data = data.gsub('&','&amp;')
+    @data = data
   end
   
   # Create a new entry from a file
@@ -36,9 +36,10 @@ class DayOne::EntryImporter
   def processed_data
     if !@processed_data
       @processed_data = {}
+      LibXML::XML::Error.set_handler(&LibXML::XML::Error::QUIET_HANDLER)
+      
       begin
-        context = LibXML::XML::Parser::Context.string(data)
-        document = LibXML::XML::Parser.new(context).parse
+        document = LibXML::XML::Parser.string(data).parse
         key = nil
         
         document.find('//plist/dict/*').each do |elem|
@@ -59,7 +60,6 @@ class DayOne::EntryImporter
         end
       rescue LibXML::XML::Error
         $stderr.puts "Error parsing #{file ? "file #{file}" : "data"}. Skipping."
-        @processed_data = {}
       end
     end
     @processed_data

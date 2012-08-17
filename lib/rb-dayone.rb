@@ -42,6 +42,12 @@ module DayOne
       @auto_journal_location ||= File.expand_path(plist_reader['NSNavLastRootDirectory'])
     end
     
+    # All DayOne entries, as file names
+    # @return [Array] all DayOne entries
+    def entries
+      Dir[File.join(journal_location, 'entries','*.doentry')]
+    end
+    
     private
     
     # The journal file location

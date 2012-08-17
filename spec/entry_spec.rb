@@ -47,4 +47,12 @@ describe DayOne::Entry do
       contents.should == e.to_xml
     end
   end
+  
+  describe "#xml_valid?" do
+    it "should handle weird XML characters" do
+      e = subject
+      e.entry_text = "Hello <&> Goodbye"
+      e.should be_xml_valid
+    end
+  end
 end

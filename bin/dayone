@@ -62,3 +62,74 @@ If you don't specify the --text tag, it will read text from STDIN and use this a
     entry.create!
   end
 end
+
+command :repair do |c|
+  c.syntax = "repair"
+  c.description = "Will repair any damage caused by previous versions of rb-dayone."
+  c.summary = "This command will trawl your DayOne journal archive looking for any malformed DayOne entries created by previous versions of rb-dayone, and will fix them. Currently it fixed malformed doctype declarations and trailing target tags."
+
+  c.action do |args, opts|
+    require 'rb-dayone'
+    
+    repairs = {
+      'trailing target' => [
+        /<target\/>\Z/,
+        ''
+      ],
+      'malformed doctype' => [
+        %r|<!DOCTYPE "plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"">|,
+        %|<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">|
+      ]
+    }
+    
+    DayOne.entries.each do |f|
+      contents = File.read(f)
+      modified = []
+      repairs.each do |name, (replace_this, with_this)|
+        if replace_this === contents
+          modified << name
+          contents = contents.gsub(replace_this, with_this)
+        end
+      end
+      
+      unless modified.empty?
+        File.open(f,'w'){ |io| io.puts contents }
+        puts "Repaired file #{f}:"
+        modified.each{ |s| puts "  Fixed #{s}" }
+      end
+    end
+    puts "All files have been repaired!"
+  end
+end
+
+command :validate do |c|
+  c.syntax = "validate"
+  c.description = "Checks through your DayOne database to see if any of your journal entries break XML validation."
+
+  c.action do
+    require 'libxml'
+    require 'rb-dayone'
+    
+    LibXML::XML::Error.set_handler(&LibXML::XML::Error::QUIET_HANDLER)
+    failed_entries = []
+    
+    all_entries = DayOne.entries
+    puts "Checking #{all_entries.size} entr#{all_entries.size == 1 ? 'y' : 'ies'}..."
+    
+    all_entries.each do |f|
+      begin
+        contents = File.read(f)
+        LibXML::XML::Parser.string(contents).parse
+      rescue LibXML::XML::Error
+        failed_entries << f
+      end
+    end
+    
+    if failed_entries.empty?
+      puts "No errors. Everything is OK!"
+    else
+      puts "#{failed_entries.size} error#{failed_entries.size == 1 ? '' : 's'} in validation:"
+      failed_entries.each{ |f| puts "  #{f}" }
+    end
+  end
+end

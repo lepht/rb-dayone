@@ -29,21 +29,32 @@ For more information on what you can do from the command line:
 
     dayone --help
 
+### Verifying and repairing doentry files ###
+
+As of version 0.2.0 of this gem, `rb-dayone` is finally outputting *nice* XML. Before then, it wasn't. You can check if any of your DayOne entries need repairing by running:
+
+    dayone verify
+
+If they do, you might be able to fix them using:
+
+    dayone repair
+
+If not, let me know, and I'll see what I can do to fix stuff.
+
 ## Install
 
     gem install rb-dayone
 
 ## Author
 
-Original author: Jan-Yves Ruzicka (@akchizar). Get in touch [via email](mailto:janyves.ruzicka@gmail.com).
+Original author: [Jan-Yves Ruzicka](http://www.1klb.com) ([@akchizar](http://www.twitter.com/akchizar)). Get in touch [via email](mailto:janyves.ruzicka@gmail.com).
 
 ## To do
 
 * Image support
 * Location support?
 
-License
--------
+## License
 
 Copyright (c) 2012 Jan-Yves Ruzicka
 

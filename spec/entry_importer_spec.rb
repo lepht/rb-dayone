@@ -41,13 +41,18 @@ describe DayOne::EntryImporter do
     end
     
     it "should accept ampersands" do
-      importer = DayOne::EntryImporter.new(wrap('&'))
+      importer = DayOne::EntryImporter.new(wrap('&amp;'))
       importer['element'].should == '&'
     end
     
     it "should accept UTF-8" do
       importer = DayOne::EntryImporter.new(wrap('æ'))
       importer['element'].should == 'æ'
+    end
+    
+    it "should accept UTF-8 from file" do
+      importer = DayOne::EntryImporter.from_file spec_data('utf.doentry')
+      importer['Entry Text'].should == 'æ'
     end
     
   end

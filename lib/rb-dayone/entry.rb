@@ -1,3 +1,5 @@
+require 'libxml'
+
 # A text-only journal entry for DayOne.
 class DayOne::Entry
 
@@ -50,7 +52,7 @@ class DayOne::Entry
   def to_xml
     builder = Builder::XmlMarkup.new(indent:2)
     builder.instruct!                     # Basic xml tag
-    builder.declare! DOCTYPE   # PList doctype
+    builder.declare! *DOCTYPE   # PList doctype
     builder.plist(version:1.0) do
       builder.dict do
         builder.key 'Creation Date'
@@ -82,5 +84,17 @@ class DayOne::Entry
     file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
     File.open(file_location,'w'){ |io| io << xml }
     return true
+  end
+  
+  # Check to make sure that we output valid xml
+  def xml_valid?
+    LibXML::XML::Error.set_handler(&LibXML::XML::Error::QUIET_HANDLER)
+    begin
+      LibXML::XML::Parser.string(to_xml).parse
+    rescue LibXML::XML::Error
+      return false
+    else
+      return true
+    end
   end
 end
