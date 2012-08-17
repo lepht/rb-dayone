@@ -29,11 +29,11 @@ For more information on what you can do from the command line:
 
     dayone --help
 
-### Verifying and repairing doentry files ###
+### Validating and repairing doentry files ###
 
 As of version 0.2.0 of this gem, `rb-dayone` is finally outputting *nice* XML. Before then, it wasn't. You can check if any of your DayOne entries need repairing by running:
 
-    dayone verify
+    dayone validate
 
 If they do, you might be able to fix them using:
 
