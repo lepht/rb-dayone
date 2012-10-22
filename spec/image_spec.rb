@@ -28,7 +28,7 @@ describe DayOne::Entry do
       e = DayOne::Entry.new
       e.image = spec_data('/sample_image.jpg')
       e.create!
-      File.should exist(spec_data("working/images/#{e.uuid}.jpg"))
+      File.should exist(spec_data("working/photos/#{e.uuid}.jpg"))
     end
   end
   

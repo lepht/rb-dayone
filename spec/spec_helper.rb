@@ -6,7 +6,7 @@ end
 
 def setup_working
   FileUtils::mkdir_p spec_data('working/entries')
-  FileUtils::mkdir_p spec_data('working/images')
+  FileUtils::mkdir_p spec_data('working/photos')
   DayOne::journal_location = spec_data('working')
 end
 

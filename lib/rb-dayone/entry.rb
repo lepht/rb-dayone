@@ -91,7 +91,7 @@ class DayOne::Entry
     file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
     File.open(file_location,'w'){ |io| io << xml }
     if image
-      new_image_path = File.join(DayOne::journal_location, 'images', "#{uuid}.jpg")
+      new_image_path = File.join(DayOne::journal_location, 'photos', "#{uuid}.jpg")
       FileUtils.cp(image, new_image_path)
       @image = new_image_path
     end

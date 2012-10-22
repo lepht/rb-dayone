@@ -42,12 +42,12 @@ Note: setting location to "auto" will set it from the DayOne plist file.
 end
 
 command :add do |c|
-  c.syntax = "add [--text \"Entry text\"] [--image /path/to/image.jpg] [--starred]"
+  c.syntax = "add [--text \"Entry text\"] [--image path/to/image.jpg] [--starred]"
   c.description = "Add an entry to your DayOne journal."
   c.summary = <<-end
 Add an entry to your DayOne journal. By default will add an unstarred entry - use the --starred flag to change this.
 
-If you don't specify the --text tag, it will read text from STDIN and use this as the journal entry.
+If you don't specify the --text or --image tag, it will read text from STDIN and use this as the journal entry.
   end
   
   c.option "--text STRING", String, "Specify the journal entry text. If not specified, will read from STDIN"
@@ -56,11 +56,26 @@ If you don't specify the --text tag, it will read text from STDIN and use this a
 
   c.action do |args, opts|
     require 'rb-dayone'
-    entry_text = opts.text || $stdin.read.strip
-    starred = opts.starred
+    entry = DayOne::Entry.new
+
+    needs_stdin_help = !(opts.image || opts.text)
+    if needs_stdin_help
+      entry.entry_text = $stdin.read.strip
+    else
+      entry.entry_text = opts.text if opts.text
+
+      if opts.image
+        if File.exists? opts.image
+          entry.image = opts.image
+        else
+          puts "Can't find image: #{opts.image}"
+          exit 1
+        end
+      end
+    end
+
+    entry.starred = opts.starred
     
-    entry = DayOne::Entry.new entry_text, starred:starred
-    entry.image = opts.image if opts.image
     entry.create!
   end
 end
