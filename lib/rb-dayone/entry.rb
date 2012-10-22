@@ -1,7 +1,11 @@
 require 'libxml'
+require 'fileutils'
 
 # A text-only journal entry for DayOne.
 class DayOne::Entry
+
+  # A list of image extensions allowed for attached images
+  ALLOWED_IMAGES = ['.jpg','.jpeg']
 
   # The date of the journal entry
   attr_accessor :creation_date
@@ -14,6 +18,9 @@ class DayOne::Entry
   
   # Whether the entry has been saved to file at all.
   attr_accessor :saved
+
+  # Path to the entry image
+  attr_accessor :image
   
   # The PList doctype, used for XML export
   DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]
@@ -76,13 +83,18 @@ class DayOne::Entry
   end
   
   # Create a .doentry file with this entry.
-  # This uses the #to_xml method to generate
-  # the entry proper.
+  # This uses the #to_xml method to generate the entry proper.
+  # It will also relocate its attached image, if required.
   # @return [Boolean] true if the operation was successful.
   def create!
     xml = self.to_xml
     file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
     File.open(file_location,'w'){ |io| io << xml }
+    if image
+      new_image_path = File.join(DayOne::journal_location, 'images', "#{uuid}.jpg")
+      FileUtils.cp(image, new_image_path)
+      @image = new_image_path
+    end
     return true
   end
   
@@ -95,6 +107,20 @@ class DayOne::Entry
       return false
     else
       return true
+    end
+  end
+
+  # Assign an image to the entry
+  # For now, this will only accept jpeg images (extension is 'jpg' or 'jpeg', case-insensitive)
+  # Later, may support conversion via the appropriate library
+  # @param image_path [String] the path to the image
+  def image= image_path
+    if !File.exists?(image_path)
+      raise RuntimeError, "Tried to link a journal entry to the image #{image_path}, but it doesn't exist."
+    elsif image_path =~ /\.[^.]+$/ && ALLOWED_IMAGES.include?($&.downcase)
+      @image = image_path
+    else
+      raise RuntimeError, "Tried to link a journal entry to the image #{image_path}, but it's not a supported image format (#{ALLOWED_IMAGES.join(", ")})."
     end
   end
 end

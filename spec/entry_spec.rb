@@ -3,11 +3,11 @@ require 'fileutils'
 
 describe DayOne::Entry do
   before :each do
-    FileUtils::mkdir_p spec_data('working/entries')
+    setup_working
   end
   
   after :each do
-    FileUtils::rm_rf spec_data('working')
+    clean_working
   end
   
   describe "#to_xml" do
@@ -34,7 +34,6 @@ describe DayOne::Entry do
   describe "#create!" do
     it "should correctly create a .doentry file" do
       
-      DayOne::journal_location = spec_data('working')
       
       e = subject
       e.entry_text = "Hello, world!"

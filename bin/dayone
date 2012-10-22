@@ -42,7 +42,7 @@ Note: setting location to "auto" will set it from the DayOne plist file.
 end
 
 command :add do |c|
-  c.syntax = "add [--text=\"Entry text\"] [--starred]"
+  c.syntax = "add [--text \"Entry text\"] [--image /path/to/image.jpg] [--starred]"
   c.description = "Add an entry to your DayOne journal."
   c.summary = <<-end
 Add an entry to your DayOne journal. By default will add an unstarred entry - use the --starred flag to change this.
@@ -52,6 +52,7 @@ If you don't specify the --text tag, it will read text from STDIN and use this a
   
   c.option "--text STRING", String, "Specify the journal entry text. If not specified, will read from STDIN"
   c.option "--starred", "Mark the entry starrd"
+  c.option "--image path/to/image.jpg", "Add an image to the entry"
 
   c.action do |args, opts|
     require 'rb-dayone'
@@ -59,6 +60,7 @@ If you don't specify the --text tag, it will read text from STDIN and use this a
     starred = opts.starred
     
     entry = DayOne::Entry.new entry_text, starred:starred
+    entry.image = opts.image if opts.image
     entry.create!
   end
 end
