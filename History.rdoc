@@ -1,3 +1,8 @@
+== 0.4.1 / 2012-11-14
+
+* [FIXED] rb-dayone was looking in the wrong place for preferences
+* [FIXED] new preference files not json-parseable. Swapped to XML/Nokogiri
+
 == 0.4.0 / 2012-10-22
 
 * Added image support
