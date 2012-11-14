@@ -39,7 +39,7 @@ module DayOne
     # the DayOne plist file stored in +~/Library/Preferences+.
     # @return [String] the DayONe journal location
     def auto_journal_location
-      @auto_journal_location ||= File.expand_path(plist_reader['NSNavLastRootDirectory'])
+      @auto_journal_location ||= File.expand_path(plist_reader.journal_location)
     end
     
     # All DayOne entries, as file names
