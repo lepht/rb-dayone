@@ -18,7 +18,9 @@ describe DayOne do
     end
     
     it "should return a default value when +location+ is 'auto'" do
-      DayOne.plist_reader = {'NSNavLastRootDirectory' => 'foo'}
+      reader = double('ReaderMock')
+      reader.should_receive(:journal_location).and_return('foo')
+      DayOne.plist_reader = reader
       DayOne::dayone_folder = location('auto')
       DayOne::journal_location.should == File.expand_path('foo')
     end

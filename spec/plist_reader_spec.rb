@@ -8,13 +8,11 @@ describe DayOne::PlistReader do
   end
   
   describe "#body" do
-    it "should give us the location of the DayOne journal file" do
-      subject.should have_key('NSNavLastRootDirectory')
-    end
-    
     it "should correctly parse binary plists" do
       reader = DayOne::PlistReader.new(File.join(File.dirname(__FILE__),'data', 'sample.plist'))
-      reader['foo'].should == 'bar'
+
+      reader.key('foo').should == 'bar'
+      expect(reader.key('bing')).to be_nil
     end
   end
 end
