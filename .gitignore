@@ -14,3 +14,6 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+# Rarity artefacts
+.rarity
