@@ -53,9 +53,23 @@ class DayOne::Entry
     @uuid ||= `uuidgen`.gsub('-','').strip
   end
 
-  # Add a tag
+  # Add a tag to the entry
+  # @param [String] str The string tag to add to the list.
   def tag str
-    @tags << str
+    @tags << str.to_s
+  end
+
+  # Searches the entry text for tags (#foo) and adds
+  # them to the entry's tags. Will avoid adding punctuation
+  # to the end of the tag (so e.g. '#foo.' will detect as #foo).
+  def add_tags_from_entry_text
+    @entry_text.scan(/(?<=[ \t])#(\S+)/) do |m|
+      if m[-1] !~ /[a-zA-Z0-9]/
+        # Then the last char is a symbol or punctuation, and we should wipe it
+        m = m[0..-2]
+      end
+      tag m
+    end
   end
   
   # The same as calling Entry#saved
