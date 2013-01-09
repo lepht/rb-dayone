@@ -21,6 +21,9 @@ class DayOne::Entry
 
   # Path to the entry image
   attr_accessor :image
+
+  # An entry's tags
+  attr_accessor :tags
   
   # The PList doctype, used for XML export
   DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]
@@ -35,6 +38,7 @@ class DayOne::Entry
     @starred = false
     @entry_text = entry_text
     @saved = false
+    @tags = []
     
     hsh.each do |k,v|
       setter = "#{k}="
@@ -67,6 +71,15 @@ class DayOne::Entry
         
         builder.key 'Entry Text'
         builder.string entry_text
+
+        if !tags.empty?
+          builder.key 'Tags'
+          builder.array do
+            tags.each do |t|
+              builder.string t
+            end
+          end
+        end
         
         builder.key 'Starred'
         if starred
