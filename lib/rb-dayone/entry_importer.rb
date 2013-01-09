@@ -1,4 +1,5 @@
 require 'libxml'
+# TODO switch to Nokogiri
 
 # Imports DayOne entries from XML files or plain text
 class DayOne::EntryImporter
@@ -54,6 +55,8 @@ class DayOne::EntryImporter
             @processed_data[key] = true
           when 'false'
             @processed_data[key] = false
+          when 'array' # NOTE: This will only do string arrays currently
+            @processed_data[key] = elem.children.select(&:element?).map{ |c| c.content }
           else
             @processed_data[key] = elem.content
           end

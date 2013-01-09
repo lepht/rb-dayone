@@ -5,7 +5,7 @@
     <key>Entry Text</key>
     <string>Hello, world!</string>
     <key>Starred</key>
-    <true/>
+    <false/>
     <key>Tags</key>
     <array>
       <string>foo tag</string>

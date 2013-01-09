@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 # The PListReader is a class that reads PLists.
 # It is used to read the DayOne preferences PList.
 class DayOne::PlistReader

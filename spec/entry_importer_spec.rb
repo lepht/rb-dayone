@@ -39,6 +39,14 @@ describe DayOne::EntryImporter do
     it "should parse dates" do
       sample_entry['Creation Date'].should == Time.new(1997, 8, 29, 2, 14, 0)
     end
+
+    it "should parse arrays" do
+      arr = sample_entry['Tags']
+      arr.should be_a Array
+      arr.size.should == 2
+      arr.should include('foo tag')
+      arr.should include('bar tag')
+    end
     
     it "should accept ampersands" do
       importer = DayOne::EntryImporter.new(wrap('&amp;'))
@@ -54,7 +62,6 @@ describe DayOne::EntryImporter do
       importer = DayOne::EntryImporter.from_file spec_data('utf.doentry')
       importer['Entry Text'].should == 'æ'
     end
-    
   end
   
   describe "#to_entry" do

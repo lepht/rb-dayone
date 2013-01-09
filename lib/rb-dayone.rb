@@ -1,5 +1,6 @@
 require 'time'
 require 'builder'
+require 'nokogiri'
 
 # This module contains all classes used in the DayOne gem,
 # as well as some helper methods
