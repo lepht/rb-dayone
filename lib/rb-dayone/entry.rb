@@ -64,6 +64,7 @@ class DayOne::Entry
   # to the end of the tag (so e.g. '#foo.' will detect as #foo).
   def add_tags_from_entry_text
     @entry_text.scan(/(?<=[ \t])#(\S+)/) do |m|
+      m = m.shift
       if m[-1] !~ /[a-zA-Z0-9]/
         # Then the last char is a symbol or punctuation, and we should wipe it
         m = m[0..-2]

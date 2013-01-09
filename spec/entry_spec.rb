@@ -35,6 +35,21 @@ describe DayOne::Entry do
       s.tag 'foo'
       s.to_xml.should match %r|<key>Tags</key>\s*<array>\s*<string>foo</string>|
     end
+
+    it "should automatically detect tags in entries" do
+      s = sample_entry
+      s.entry_text = <<-end
+# Sample document
+
+#Heading
+
+This document tests our ability to detect tags like #foo and #bar, and even #baz! But #foo2012 and #bar-!$%W should still be accepted.
+end
+      s.add_tags_from_entry_text
+      %w(foo bar baz foo2012 bar-!$%W).each do |t|
+        s.tags.should include(t)
+      end
+    end
   end
   
   describe "#create!" do
