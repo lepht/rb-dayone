@@ -52,6 +52,11 @@ class DayOne::Entry
   def uuid
     @uuid ||= `uuidgen`.gsub('-','').strip
   end
+
+  # Add a tag
+  def tag str
+    @tags << str
+  end
   
   # The same as calling Entry#saved
   def saved?

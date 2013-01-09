@@ -29,6 +29,12 @@ describe DayOne::Entry do
     it "should act properly when starred" do
       sample_entry.to_xml.should match %r|<key>Starred</key>\s*<true/>|
     end
+
+    it "should populate with tags" do
+      s = sample_entry
+      s.tag 'foo'
+      s.to_xml.should match %r|<key>Tags</key>\s*<array>\s*<string>foo</string>|
+    end
   end
   
   describe "#create!" do
