@@ -1,6 +1,12 @@
-bin/dayone
+# INCLUDE lib/**/*
+# INCLUDE *
+# EXCLUDE **/.DS_Store
+# EXCLUDE .rarity
+# EXCLUDE .yardopts
+
+.gitignore
 Gemfile
-History.rdoc
+Gemfile.lock
 lib/rb-dayone.rb
 lib/rb-dayone/entry.rb
 lib/rb-dayone/entry_importer.rb
@@ -10,19 +16,4 @@ Manifest
 Rakefile
 rb-dayone.gemspec
 README.md
-spec/data/entries/748AD5D252F44149920485B0CEA478E3.doentry
-spec/data/entries/F13723CDFD454481B24312DCD627BFD7.doentry
-spec/data/foo.doentry
-spec/data/locations/location-auto/location
-spec/data/locations/location-specified/location
-spec/data/locations/location-unspecified
-spec/data/sample.doentry
-spec/data/sample.plist
-spec/data/utf.doentry
-spec/dayone_spec.rb
-spec/entry_importer_spec.rb
-spec/entry_spec.rb
-spec/plist_reader_spec.rb
-spec/search_spec.rb
-spec/spec_helper.rb
 version.txt
