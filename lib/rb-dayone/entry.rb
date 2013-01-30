@@ -21,6 +21,8 @@ class DayOne::Entry
 
   # An entry's tags
   attr_accessor :tags
+
+  # The location of the entry. 
   
   # The PList doctype, used for XML export
   DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]

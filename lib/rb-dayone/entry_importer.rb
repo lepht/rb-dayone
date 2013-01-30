@@ -43,7 +43,8 @@ class DayOne::EntryImporter
       starred: self['Starred'],
       creation_date: self['Creation Date'],
       saved: true,
-      tags: self['Tags']||[]
+      tags: self['Tags']||[],
+      location: self['Location']||{}
     )
   end
 

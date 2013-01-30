@@ -28,6 +28,13 @@ class Location
     end
   end
 
+  # Has this location been left blank?
+  # @return [bool] If any value in this instance is not nil or blank
+  def left_blank?
+    [:country, :locality, :administrative_area, :place_name].any?{ |s| ![nil,''].include?(send(s)) } ||
+    [:latitude, :longitude].any?{ |s| ![nil,0.0].include?(send(s)) }
+  end
+
   # Create a location from an XML snippet.
   # @param [Nokogiri::Node] element The XML element (<dict> contents) that contains the location data
   # @return [Location] The location formed from this data
