@@ -14,6 +14,42 @@ describe DayOne::EntryImporter do
       file_ei.data.should == 'foo'
     end
   end
+
+  describe "#processed_data" do
+    let(:data){ DayOne::EntryImporter.from_file spec_data('entry_importer_parse_test.xml')  }
+
+    it "should accept strings" do
+      expect(data['String test']).to eq('Sample string')
+    end
+
+    it "should accept reals" do
+      expect(data['Real test']).to eq(3.141)
+    end
+
+    it "should accept dates" do
+      expect(data['Date test'].year).to eq(1997)
+    end
+
+    it "should accept booleans" do
+      expect(data['Bool test']).to be_true
+      expect(data['Bool test 2']).to be_false
+    end
+
+    it "should accept arrays" do
+      arr = data['Array test']
+      expect(arr).to be_a(Array)
+      expect(arr.size).to eq(2)
+      expect(arr[0]).to eq('A string')
+      expect(arr[1]).to eq(1.234)
+    end
+
+    it "should accept dictionaries" do
+      dict = data['Dict test']
+      expect(dict).to be_a(Hash)
+      expect(dict.keys.size).to eq(1)
+      expect(dict['Sample dict key']).to eq(2.345)
+    end
+  end
   
   describe "#[]" do
     
@@ -26,26 +62,6 @@ describe DayOne::EntryImporter do
   </dict>
 </plist>
       end
-    end
-    
-    it "should parse strings" do
-      sample_entry['Entry Text'].should == 'Hello, world!'
-    end
-    
-    it "should parse booleans" do
-      sample_entry['Starred'].should == true
-    end
-    
-    it "should parse dates" do
-      sample_entry['Creation Date'].should == Time.utc(1997, 8, 29, 2, 14, 0)
-    end
-
-    it "should parse arrays" do
-      arr = sample_entry['Tags']
-      arr.should be_a Array
-      arr.size.should == 2
-      arr.should include('foo tag')
-      arr.should include('bar tag')
     end
     
     it "should accept ampersands" do

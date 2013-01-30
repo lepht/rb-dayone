@@ -32,35 +32,7 @@ class DayOne::EntryImporter
   # Generate and return the data contained within the doentry file, as a hash
   # @return [Hash] the processed data
   def processed_data
-    if !@processed_data
-      @processed_data = {}      
-      begin
-        document = Nokogiri::XML(data)
-        key = nil
-        
-        document.xpath('//plist/dict/*').each do |elem|
-          case elem.name
-          when 'key'
-            key = elem.content
-          when 'date'
-            if elem.content =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
-              @processed_data[key] = Time.utc($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
-            end
-          when 'true'
-            @processed_data[key] = true
-          when 'false'
-            @processed_data[key] = false
-          when 'array' # NOTE: This will only do string arrays currently
-            @processed_data[key] = elem.children.select(&:element?).map{ |c| c.content }
-          else
-            @processed_data[key] = elem.content
-          end
-        end
-      rescue LibXML::XML::Error
-        $stderr.puts "Error parsing #{file ? "file #{file}" : "data"}. Skipping."
-      end
-    end
-    @processed_data
+    @processed_data ||= process_dict(Nokogiri::XML(data).xpath('//plist/dict').first)
   end
   
   # Generate an entry from this importer
@@ -73,5 +45,48 @@ class DayOne::EntryImporter
       saved: true,
       tags: self['Tags']||[]
     )
+  end
+
+  private
+
+  # Process an XML tag. Returns a the value of the tag as a ruby value.
+  # @param [Nokogiri::XML::Element] element The element to process
+  # @return The values contained within the element
+  def process_value element
+    case element.name
+    when 'date'
+      if element.content =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
+          Time.utc($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
+        end
+    when 'string'
+      element.content
+    when 'real'
+      element.content.to_f
+    when 'true'
+      true
+    when 'false'
+      false
+    when 'array'
+      element.xpath('*').map{ |e| process_value(e) }
+    when 'dict'
+      process_dict(element)
+    end
+  end
+
+  # Process an XML dict element. Returns a hash of values
+  # @param [Nokogiri::XML::Element] element The dictionary element to process
+  # @return [Hash] The values contained within the element
+  def process_dict dict
+    processed_data = {}
+    key = nil
+
+    dict.xpath('*').each do |elem|
+      if elem.name == 'key'
+        key = elem.content
+      else
+        processed_data[key] = process_value(elem)
+      end
+    end
+    processed_data
   end
 end

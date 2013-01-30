@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<plist>
+  <dict>
+    <key>String test</key>
+    <string>Sample string</string>
+    <key>Real test</key>
+    <real>3.141</real>
+    <key>Date test</key>
+    <date>1997-08-29T02:14:0Z</date>
+    <key>Array test</key>
+    <array>
+      <string>A string</string>
+      <real>1.234</real>
+    </array>
+    <key>Dict test</key>
+    <dict>
+      <key>Sample dict key</key>
+      <real>2.345</real>
+    </dict>
+    <key>Bool test</key>
+    <true />
+    <key>Bool test 2</key>
+    <false />
+  </dict>
+</plist>
