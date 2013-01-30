@@ -10,16 +10,16 @@ class DayOne::EntryImporter
   # Create a new entry based on a string. To import from a file,
   # use EntryImporter.from_file.
   # @param [String] data The raw data for the importer to process
-  def initialize data
+  # @param [String] file The file this data came from. Defaults to +nil+.
+  def initialize data, file=nil
     @data = data
+    @file = file
   end
   
   # Create a new entry from a file
   # @param [String] file The file to import
   def self.from_file file
-    ei = new(File.read(file))
-    ei.file = file
-    ei
+    new(File.read(file), file)
   end
   
   # Access entry data by key
