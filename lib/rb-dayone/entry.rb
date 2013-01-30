@@ -1,6 +1,3 @@
-require 'libxml'
-require 'fileutils'
-
 # A text-only journal entry for DayOne.
 class DayOne::Entry
 
@@ -133,14 +130,8 @@ class DayOne::Entry
   
   # Check to make sure that we output valid xml
   def xml_valid?
-    LibXML::XML::Error.set_handler(&LibXML::XML::Error::QUIET_HANDLER)
-    begin
-      LibXML::XML::Parser.string(to_xml).parse
-    rescue LibXML::XML::Error
-      return false
-    else
-      return true
-    end
+    doc = Nokogiri::XML(to_xml)
+    doc.errors.empty?
   end
 
   # Assign an image to the entry
