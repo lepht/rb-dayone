@@ -37,7 +37,7 @@ describe DayOne::EntryImporter do
     end
     
     it "should parse dates" do
-      sample_entry['Creation Date'].should == Time.new(1997, 8, 29, 2, 14, 0)
+      sample_entry['Creation Date'].should == Time.utc(1997, 8, 29, 2, 14, 0)
     end
 
     it "should parse arrays" do

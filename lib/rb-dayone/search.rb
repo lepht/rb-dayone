@@ -8,20 +8,27 @@ class DayOne::Search
   
   # The entry must be starred
   attr_accessor :starred
+
+  # The entry must have this tag
+  attr_accessor :tag
   
-  # Initialize the search. Currently you can only search by entry text and starred status,
-  # but both of these can be passed in via hash.
+  # Initialize the search. Currently you can search by:
+  # * entry text
+  # * starred status
+  # * tag
+  # 
+  # These can be passed in via hash.
   # @param [Hash] hash a hash of search criteria, including:
-  #   * +entry_text+: Text that the entry must include
-  #   * +starred+: whether the entry is starred or not
+  #   * +:entry_text+ -  Text that the entry must include
+  #   * +:starred+ - whether the entry is starred or not
+  #   * +:tag+ - a tag that the entry must have
   def initialize hash={}
-    @entry_text = ''
     hash.each do |k,v|
       setter = "#{k}="
       self.send(setter, v) if self.respond_to?(setter)
     end
   end
-  
+
   # Fetch the results by searching. Uses a cached version of the DayOne database.
   # @return [Array] all entries matching your results
   def results
@@ -29,8 +36,9 @@ class DayOne::Search
       @results = []
       working_results = cache
 
-      working_results = working_results.select{ |e| e.entry_text.include? entry_text } unless entry_text == ''
+      working_results = working_results.select{ |e| e.entry_text.include? entry_text } unless entry_text.nil?
       working_results = working_results.select{ |e| e.starred == starred } unless starred.nil?
+      working_results = working_results.select{ |e| e.tags.include? tag } unless tag.nil?
       
       @results = working_results
     end

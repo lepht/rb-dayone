@@ -31,6 +31,12 @@ Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via emai
 
 ## History
 
+### 0.6.0 / 2013-01-14
+
+* [NEW] Added the ability to search by tag.
+* [FIXED] No longer relies on LibXML - all Nokogiri!
+* [FIXED] Imports times correctly as UTC.
+
 ### 0.5.0 / 2013-01-09
 
 * [NEW] Added support for tagging entries via `Entry#tag`, `Entry#tags`, and `Entry#add_tags_from_entry_text`.

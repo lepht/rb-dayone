@@ -1,3 +1,5 @@
+require './spec/spec_helper'
+
 describe DayOne::Entry do
   before :all do
     setup_working

@@ -57,7 +57,7 @@ class DayOne::PlistReader
   # @return [String] the path to the current DayOne journal location
   def journal_location
     key('JournalPackageURL') || # First, try the 1.7 location...
-    key('NSNavLastRootDirectory')
+    key('NSNavLastRootDirectory') # Then try the pre-1.7 location
   end
   
   # This allows us to access the body's method as well as the reader's.

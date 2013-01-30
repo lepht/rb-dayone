@@ -6,6 +6,10 @@
     <date>2012-08-16T08:42:17Z</date>
     <key>Entry Text</key>
     <string>Yes, this is foo.</string>
+    <key>Tags</key>
+    <array>
+        <string>tag</string>
+    </array>
     <key>Starred</key>
     <false/>
     <key>UUID</key>

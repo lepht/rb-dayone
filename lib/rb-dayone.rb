@@ -1,6 +1,7 @@
 require 'time'
 require 'builder'
 require 'nokogiri'
+require 'fileutils'
 
 # This module contains all classes used in the DayOne gem,
 # as well as some helper methods
@@ -21,19 +22,16 @@ module DayOne
     # will set from the DayOne plist (See +auto_journal_location+).
     # @return [String] the DayOne journal location
     def journal_location
-      if !@journal_location 
-        if File.exists?(journal_file)
-          contents = File.read(journal_file)
-          @journal_location = if contents == 'auto'
-            auto_journal_location
-          else
-            contents
-          end
+      @journal_location ||= if File.exists?(journal_file)
+        contents = File.read(journal_file)
+        if contents == 'auto'
+          auto_journal_location
         else
-          @journal_location = auto_journal_location
+          contents
         end
+      else
+        auto_journal_location
       end
-      @journal_location
     end
     
     # The location of the DayOne journal file as determined by
@@ -50,7 +48,7 @@ module DayOne
     end
     
     private
-    
+
     # The journal file location
     # @return [String] the location of the journal file
     def journal_file

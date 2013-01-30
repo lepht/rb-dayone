@@ -1,6 +1,3 @@
-require 'libxml'
-# TODO switch to Nokogiri
-
 # Imports DayOne entries from XML files or plain text
 class DayOne::EntryImporter
   
@@ -36,20 +33,18 @@ class DayOne::EntryImporter
   # @return [Hash] the processed data
   def processed_data
     if !@processed_data
-      @processed_data = {}
-      LibXML::XML::Error.set_handler(&LibXML::XML::Error::QUIET_HANDLER)
-      
+      @processed_data = {}      
       begin
-        document = LibXML::XML::Parser.string(data).parse
+        document = Nokogiri::XML(data)
         key = nil
         
-        document.find('//plist/dict/*').each do |elem|
+        document.xpath('//plist/dict/*').each do |elem|
           case elem.name
           when 'key'
             key = elem.content
           when 'date'
             if elem.content =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
-              @processed_data[key] = Time.new($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
+              @processed_data[key] = Time.utc($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
             end
           when 'true'
             @processed_data[key] = true
@@ -75,7 +70,8 @@ class DayOne::EntryImporter
       self['Entry Text'],
       starred: self['Starred'],
       creation_date: self['Creation Date'],
-      saved: true
+      saved: true,
+      tags: self['Tags']||[]
     )
   end
 end
