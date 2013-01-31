@@ -36,6 +36,15 @@ describe DayOne::Entry do
       s.to_xml.should match %r|<key>Tags</key>\s*<array>\s*<string>foo</string>|
     end
 
+    it "should put locations into the xml" do
+      s = sample_entry
+      s.location.country = 'New Zealand'
+      doc = Nokogiri::XML(s.to_xml)
+      dict = doc.xpath('//plist/dict/dict')
+      expect(dict.size).to eq(1)
+      expect(dict.first.xpath('//string').select{ |s| s.content == 'New Zealand' }.size).to eq(1)
+    end
+
     it "should automatically detect tags in entries" do
       s = sample_entry
       s.entry_text = <<-end
@@ -54,7 +63,6 @@ end
   
   describe "#create!" do
     it "should correctly create a .doentry file" do
-      
       
       e = subject
       e.entry_text = "Hello, world!"

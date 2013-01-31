@@ -11,6 +11,11 @@
       <string>foo tag</string>
       <string>bar tag</string>
     </array>
+    <key>Location</key>
+    <dict>
+      <key>Country</key>
+      <string>New Zealand</string>
+    </dict>
     <key>Creation Date</key>
     <date>1997-08-29T02:14:0Z</date>
   </dict>

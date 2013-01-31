@@ -22,7 +22,8 @@ class DayOne::Entry
   # An entry's tags
   attr_accessor :tags
 
-  # The location of the entry. 
+  # The location of the entry.
+  attr_accessor :location
   
   # The PList doctype, used for XML export
   DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]
@@ -38,6 +39,7 @@ class DayOne::Entry
     @entry_text = entry_text
     @saved = false
     @tags = []
+    @location = DayOne::Location.new hsh.delete(:location)
     
     hsh.each do |k,v|
       setter = "#{k}="
@@ -99,6 +101,8 @@ class DayOne::Entry
             end
           end
         end
+
+        location.to_xml(builder) unless location.left_blank?
         
         builder.key 'Starred'
         if starred

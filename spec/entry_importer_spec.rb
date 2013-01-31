@@ -86,6 +86,7 @@ describe DayOne::EntryImporter do
       entry.entry_text.should == 'Hello, world!'
       entry.starred.should be_true
       entry.creation_date.year.should == 1997
+      entry.location.country.should == 'New Zealand'
       entry.should be_saved      
     end
   end

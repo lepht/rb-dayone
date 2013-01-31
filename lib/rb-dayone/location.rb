@@ -1,45 +1,30 @@
 # This represents a location as recognised by DayOne.app
-class Location
+class DayOne::Location
 
-  # The country this post was made in
-  attr_accessor :country
+  # An array of components that make up the location
+  STRING_COMPONENTS = [:country, :locality, :administrative_area, :place_name]
+  REAL_COMPONENTS = [:latitude, :longitude]
+  ALL_COMPONENTS = STRING_COMPONENTS + REAL_COMPONENTS
 
-  # The locality this post was made in
-  attr_accessor :locality
-
-  # The administrative area this post was made in
-  attr_accessor :administrative_area
-
-  # The place this post was made at
-  attr_accessor :place_name
-  
-  # The latitude this post was made at. Saved as a +real+ to XML.
-  attr_accessor :latitude
-
-  # The longitude this post was made at. Saved as a +real+ to XML.
-  attr_accessor :longitude
+  # These are all instance variables
+  attr_accessor *ALL_COMPONENTS
 
   # Initialize the location with a hash of values.
   # @param [Hash] hsh The values to be assigned on initalization
-  def initialize hsh={}
-    hsh.each do |k,v|
-      setter = "#{k}="
-      send(setter,v) if respond_to?(setter)
+  def initialize hsh=nil
+    if hsh
+      hsh.each do |k,v|
+        setter = "#{symbol(k)}="
+        send(setter,v) if respond_to?(setter)
+      end
     end
   end
 
   # Has this location been left blank?
   # @return [bool] If any value in this instance is not nil or blank
   def left_blank?
-    [:country, :locality, :administrative_area, :place_name].any?{ |s| ![nil,''].include?(send(s)) } ||
-    [:latitude, :longitude].any?{ |s| ![nil,0.0].include?(send(s)) }
-  end
-
-  # Create a location from an XML snippet.
-  # @param [Nokogiri::Node] element The XML element (<dict> contents) that contains the location data
-  # @return [Location] The location formed from this data
-  def self.from_xml element
-    raise RuntimeError, "Not yet implemented"
+    STRING_COMPONENTS.all?{ |s| [nil,''].include?(send(s)) } &&
+    REAL_COMPONENTS.all?{ |s| [nil,0.0].include?(send(s)) }
   end
     
   # Converts the location to xml. A +builder+ must be supplied, and
@@ -50,24 +35,40 @@ class Location
   def to_xml builder
     builder.key 'Location'
     builder.dict do
-      builder.key 'Country'
-      builder.string country
-      
-      builder.key 'Administrative Area'
-      builder.string administrative_area
-      
-      builder.key 'Locality'
-      builder.string locality
+      STRING_COMPONENTS.each do |s|
+        builder.key xml_string(s)
+        builder.string send(s)
+      end
 
-      builder.key 'Place Name'
-      builder.string place_name
-
-      builder.key 'Latitude'
-      builder.real latitude.to_f
-
-      builder.key 'Longitude'
-      builder.real longitude.to_f
+      REAL_COMPONENTS.each do |s|
+        builder.key xml_string(s)
+        builder.real send(s)
+      end
     end
     true
+  end
+
+  private
+
+  # Gives the XML string for a particular symbol
+  # @param [Symbol] symbol The symbol to find the XML string for
+  # @return [String] The string for this symbol
+  def xml_string symbol
+    if symbol.is_a? String
+      symbol
+    else
+      symbol.to_s.gsub('_',' ').gsub(/\b./, &:upcase)
+    end
+  end
+
+  # Gives the symbol for a particular XML string
+  # @param [String] string The XML string to find the symbol for
+  # @return [Symbol] The symbol for this symbol
+  def symbol xml_string
+    if xml_string.is_a? Symbol
+      xml_string
+    else
+      xml_string.downcase.gsub(' ','_').intern
+    end
   end
 end
