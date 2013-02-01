@@ -14,6 +14,9 @@ Gem::Specification.new do |s|
   s.files = File.read('Manifest').split("\n").select{ |l| !l.start_with?('#') && l != ''}
   s.require_paths << 'lib'
   s.extra_rdoc_files = ['README.md']
+
+  s.executables << 'dayone'
+
   
   s.add_runtime_dependency 'builder', '~> 2.0'
   s.add_runtime_dependency 'commander', '~> 4.1.2'

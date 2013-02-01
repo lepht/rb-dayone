@@ -1,15 +1,18 @@
 # INCLUDE lib/**/*
+# INCLUDE bin/*
 # INCLUDE *
 # EXCLUDE **/.DS_Store
 # EXCLUDE .rarity
 # EXCLUDE .yardopts
 
 .gitignore
+bin/dayone
 Gemfile
 Gemfile.lock
 lib/rb-dayone.rb
 lib/rb-dayone/entry.rb
 lib/rb-dayone/entry_importer.rb
+lib/rb-dayone/location.rb
 lib/rb-dayone/plist_reader.rb
 lib/rb-dayone/search.rb
 Manifest
