@@ -50,7 +50,7 @@ module DayOne
     end
 
     def version
-      @version ||= File.read(File.join(lib_root,'..','version.txt'))
+      @version ||= File.read(File.join(File.dirname(__FILE__),'..','version.txt'))
     end
     
     private
