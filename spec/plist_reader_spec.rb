@@ -12,7 +12,7 @@ describe DayOne::PlistReader do
       reader = DayOne::PlistReader.new(File.join(File.dirname(__FILE__),'data', 'sample.plist'))
 
       reader.key('foo').should == 'bar'
-      expect(reader.key('bing')).to be_nil
+      reader.key('bing').should be_nil
     end
   end
 end

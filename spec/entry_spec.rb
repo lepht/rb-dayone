@@ -41,8 +41,8 @@ describe DayOne::Entry do
       s.location.country = 'New Zealand'
       doc = Nokogiri::XML(s.to_xml)
       dict = doc.xpath('//plist/dict/dict')
-      expect(dict.size).to eq(1)
-      expect(dict.first.xpath('//string').select{ |s| s.content == 'New Zealand' }.size).to eq(1)
+      dict.size.should eq(1)
+      dict.first.xpath('//string').select{ |s| s.content == 'New Zealand' }.size.should eq(1)
     end
 
     it "should automatically detect tags in entries" do

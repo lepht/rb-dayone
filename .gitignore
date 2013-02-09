@@ -9,6 +9,7 @@ pkg
 rdoc
 spec/reports
 tmp
+.ruby-version
 
 # YARD artifacts
 .yardoc

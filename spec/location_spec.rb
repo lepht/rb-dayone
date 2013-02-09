@@ -4,25 +4,25 @@ describe DayOne::Location do
   describe "#initialize" do
     it "should set via symbol" do
       l = DayOne::Location.new(administrative_area: 'foo')
-      expect(l.administrative_area).to eq('foo')
+      l.administrative_area.should eq('foo')
     end
 
     it "should set via string" do
       l = DayOne::Location.new('Administrative Area' => 'foo')
-      expect(l.administrative_area).to eq('foo')
+      l.administrative_area.should eq('foo')
     end
   end
 
   describe "#left_blank?" do
     it "should return true if all values are nil, '' or 0" do
       l = DayOne::Location.new
-      expect(l.left_blank?).to be_true
+      l.left_blank?.should be_true
       l.country = ''
       l.latitude = 0.0
       l.longitude = 0
-      expect(l.left_blank?).to be_true
+      l.left_blank?.should be_true
       l.place_name = '!'
-      expect(l.left_blank?).to be_false
+      l.left_blank?.should be_false
     end
   end
 
@@ -33,7 +33,7 @@ describe DayOne::Location do
       b.should_receive(:string).exactly(4).times
       b.should_receive(:real).exactly(2).times
       b.should_receive(:dict){ |&blck| blck.call }
-      expect(DayOne::Location.new(country:'New Zealand').to_xml(b)).to be_true
+      DayOne::Location.new(country:'New Zealand').to_xml(b).should be_true
     end
   end
 end
