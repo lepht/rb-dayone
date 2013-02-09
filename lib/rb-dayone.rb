@@ -3,6 +3,8 @@ require 'builder'
 require 'nokogiri'
 require 'fileutils'
 
+lib_root = File.dirname(__FILE__)
+
 # This module contains all classes used in the DayOne gem,
 # as well as some helper methods
 module DayOne
@@ -46,6 +48,10 @@ module DayOne
     def entries
       Dir[File.join(journal_location, 'entries','*.doentry')]
     end
+
+    def version
+      @version ||= File.read(File.join(lib_root,'..','version.txt'))
+    end
     
     private
 
@@ -57,7 +63,7 @@ module DayOne
   end
 end
 
-lib_root = File.dirname(__FILE__)
+
 Dir[File.join(lib_root, "rb-dayone", "*.rb")].each{ |f| require f }
 
 # Default values

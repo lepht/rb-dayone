@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 require 'rb-dayone'
 require 'commander/import'
+require 'optparse/time'
 require 'time'
 
 program :name, 'dayone'
-program :version, '0.6.0'
+program :version, DayOne::version
 program :description, 'A binary interface for the rb-dayone gem'
 
 command :create do |c|
@@ -20,21 +21,19 @@ command :create do |c|
   c.action do |args,opts|
     e = DayOne::Entry.new
     e.starred = opts.starred
-    e.creation_date = if opts.time
-      opts.time
-    else
-      Time.now
-    end
-    e.image = opts.image
-    e.tags = opts.tags.split(',')
-    if args
-      e.entry_text = args.shift
-    else
+    e.creation_date = opts.time || Time.now
+    e.image = opts.image if opts.image
+    e.tags = opts.tags.split(',') if opts.tags
+    if args.empty?
       puts "Entry text:" unless opts.quiet
       e.entry_text = $stdin.read.strip
+    else
+      # puts "Creating entry, "
+      e.entry_text = args.shift
     end
 
     e.add_tags_from_entry_text if opts.autotag
     e.create!
     puts "Entry created" unless opts.quiet
   end
+end

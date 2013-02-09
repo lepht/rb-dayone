@@ -21,19 +21,24 @@ When you're ready to save your entry, just run the `create!` method:
 
     e.create!
 
+## Binary
+
+Rb-dayone ships with a binary, `dayone`. Run `dayone --help` for instructions on how to use it.
+
 ## Install
 
     gem install rb-dayone
 
 ## Author
 
-Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via email](mailto:janyves.ruzicka@gmail.com).
+Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via email](mailto:jan@1klb.com).
 
 ## History
 
 ### 0.6.0 / 2013-01-14
 
-* [NEW] Added the ability to search by tag.
+* [NEW] Location support
+* [NEW] Re-added the binary with actual functionality.
 * [FIXED] No longer relies on LibXML - all Nokogiri!
 * [FIXED] Imports times correctly as UTC.
 
