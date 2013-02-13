@@ -33,7 +33,8 @@ describe DayOne::Entry do
     it "should populate with tags" do
       s = sample_entry
       s.tag 'foo'
-      s.to_xml.should match %r|<key>Tags</key>\s*<array>\s*<string>foo</string>|
+      s.tag 'bar'
+      s.to_xml.should match %r|<key>Tags</key>\s*<array>\s*<string>foo</string>\s*<string>bar</string>|
     end
 
     it "should put locations into the xml" do
@@ -52,12 +53,13 @@ describe DayOne::Entry do
 
 #Heading
 
-This document tests our ability to detect tags like #foo and #bar, and even #baz! But #foo2012 and #bar-!$%W should still be accepted.
+This document tests our ability to detect tags like #foo and #bar, and even #baz! But #foo2012 and #bar-!$%W should still be accepted. This#antifoo should not.
 end
       s.add_tags_from_entry_text
       %w(foo bar baz foo2012 bar-!$%W).each do |t|
         s.tags.should include(t)
       end
+      s.tags.should_not include('antifoo')
     end
   end
   
