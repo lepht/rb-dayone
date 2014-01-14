@@ -71,18 +71,10 @@ class DayOne::Entry
     @tags << str.to_s
   end
 
-  # Searches the entry text for tags (#foo) and adds
-  # them to the entry's tags. Will avoid adding punctuation
-  # to the end of the tag (so e.g. '#foo.' will detect as #foo).
+  # Searches the entry text for tags (#foo) and adds them to the entry's tags.
+  # Only recognises letters, numbers and underscores in tags.
   def add_tags_from_entry_text
-    @entry_text.scan(/(?<=[ \t\n])#(\S+)/) do |m|
-      m = m.shift
-      if m[-1] !~ /[a-zA-Z0-9]/
-        # Then the last char is a symbol or punctuation, and we should wipe it
-        m = m[0..-2]
-      end
-      tag m
-    end
+    @entry_text.scan(/(?<=[ \t\n])#([a-zA-Z0-9_]+)/){ |m| tag m.shift }
   end
 
   alias_method :auto_tag, :add_tags_from_entry_text

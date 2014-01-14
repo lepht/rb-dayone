@@ -53,10 +53,10 @@ describe DayOne::Entry do
 
 #Heading
 
-This document tests our ability to detect tags like #foo and #bar, and even #baz! But #foo2012 and #bar-!$%W should still be accepted. This#antifoo should not.
+This document tests our ability to detect tags like #foo and #bar, and even #baz! But #foo2012 and #bar_3 should still be accepted. This#antifoo should not.
 end
       s.add_tags_from_entry_text
-      %w(foo bar baz foo2012 bar-!$%W).each do |t|
+      %w(foo bar baz foo2012 bar_3).each do |t|
         s.tags.should include(t)
       end
       s.tags.should_not include('antifoo')
