@@ -15,6 +15,11 @@ lib/rb-dayone/entry_importer.rb
 lib/rb-dayone/location.rb
 lib/rb-dayone/plist_reader.rb
 lib/rb-dayone/search.rb
+lib/rb-dayone/search_engine.rb
+lib/rb-dayone/search_engines/creation_date_search.rb
+lib/rb-dayone/search_engines/entry_text_search.rb
+lib/rb-dayone/search_engines/starred_search.rb
+lib/rb-dayone/search_engines/tag_search.rb
 Manifest
 Rakefile
 rb-dayone.gemspec
