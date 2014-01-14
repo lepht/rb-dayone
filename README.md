@@ -25,25 +25,27 @@ When you're ready to save your entry, just run the `create!` method:
 
 You can now search your DayOne archives. Use the `DayOne::Search` object to start a search:
 
-    s = DayOne::Search.new
-    s.entry_text = "foo"      # Will find all entries with the word "foo" in them.
-    s.starred = true          # Will find all starred entries
-    s.starred = false         # Will find all unstarred entries
-    s.starred = nil           # Doesn't care about stars any more
-    s.tag = "log"             # Finds entries tagged "log"
-    s.creation_date_after(t)  # Finds entries after the time `t`
-    s.creation_date_before(t)  # Finds entries after the time `t`
+    s = DayOne::Search.new do
+        entry_text.include "Foo" # Entry must have "foo" in the entry text
+        entry_text.exclude "Bar" # Entry cannot have "bar" in the entry text
+        tag.include "baz"        # Entry must be tagged "baz"
+        tag.exclude "caz"        # Entry cannot be tagged "caz"
+        starred.is true          # Entry is starred
+        starred.is false         # Entry is not starred
+        creation_date.after t    # Entry created after +t+
+        creation_date.before t   # Entry created before +t+
+    end
 
-You can apply multiple criteria - the object will only return entries that match every criterion you give it. You cannot apply multiple criteria of the same type, e.g.:
+    s.results # Retrieve an array of search results
 
-    s = DayOne::Search.new
-    s.entry_text = "foo"
-    s.entry_text = "bar"
-    # This will not return all entries containing "foo" and "bar"
+Most of these methods can be combined, e.g.:
 
-To retrieve your entries:
+    s = DayOne::Search.new do
+        entry_text.include "Eggs"
+        entry_text.include "Milk"
+    end
 
-    s.results # Array of DayOne entries
+This will only find posts that contain both the words "Eggs" and "Milk" in the entry text.
 
 ## Binary
 
