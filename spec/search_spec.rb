@@ -59,6 +59,11 @@ describe DayOne::Search do
     it "should find posts when searching for tags" do
       search = DayOne::Search.new{ tag.include 'tag' }
       expect(search.results.size).to eq(1)
+
+      exc_search = DayOne::Search.new{ tag.exclude "tag" }
+      expect(exc_search.results.size).to eq(1)
+      expect(exc_search.results.first.entry_text).to eq("Hello bar.")
+
       no_search = DayOne::Search.new{ tag.include 'does not exist'}
       expect(no_search.results).to be_empty
     end

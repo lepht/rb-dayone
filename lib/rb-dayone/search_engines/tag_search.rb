@@ -22,6 +22,9 @@ class DayOne::TagSearch < DayOne::SearchEngine
   def matches? string
     tag_string = string[%r|<key>Tags</key>\s+<array>(.*?)</array>|m,1]
 
+    # Edge case: no tags
+    return true if @include.empty? && tag_string.nil?
+
     return (tag_string &&
       @include.all?{ |s| tag_string.include?(s) } &&
       @exclude.all?{ |s| !tag_string.include?(s) }
