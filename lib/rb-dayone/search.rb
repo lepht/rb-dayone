@@ -92,17 +92,4 @@ class DayOne::Search
   def [] index
     results[index]
   end
-  
-  private
-  
-  # Caches all journal entries for us. On first running, will load everything
-  # from file. After this, will just refer back to the cache.
-  # @return [Array] an array of DayOne::Entry objects
-  def cache
-    if !@cache
-      entries = File.join(DayOne::journal_location, 'entries', '*.doentry')
-      @cache = Dir[entries].map{ |e| DayOne::EntryImporter::from_file(e).to_entry }
-    end
-    @cache
-  end
 end
