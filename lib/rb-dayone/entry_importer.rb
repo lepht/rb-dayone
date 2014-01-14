@@ -44,7 +44,8 @@ class DayOne::EntryImporter
       creation_date: self['Creation Date'],
       saved: true,
       tags: self['Tags']||[],
-      location: self['Location']||{}
+      location: self['Location']||{},
+      uuid: self["UUID"]
     )
   end
 

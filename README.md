@@ -64,6 +64,8 @@ Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via emai
 ### 0.7.1 / 2014-01-15
 
 * [NEW] Save entries with `Entry#save!`, delete them with `Entry#delete!`
+* [FIXED] Will now recognise hashtags at the start of lines.
+* [FIXED] EntryImporter now adds the UUID to generated Entries
 
 ### 0.7.0 / 2014-01-14
 

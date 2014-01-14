@@ -26,6 +26,10 @@ class DayOne::Entry
 
   # The location of the entry.
   attr_accessor :location
+
+  # The UUID of the entry. Auto-generated if it doesn't already exist, this
+  # shouldn't be manually set.
+  attr_accessor :uuid
   
   # The PList doctype, used for XML export
   DOCTYPE = [:DOCTYPE, :plist, :PUBLIC, "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"]
@@ -71,7 +75,7 @@ class DayOne::Entry
   # them to the entry's tags. Will avoid adding punctuation
   # to the end of the tag (so e.g. '#foo.' will detect as #foo).
   def add_tags_from_entry_text
-    @entry_text.scan(/(?<=[ \t])#(\S+)/) do |m|
+    @entry_text.scan(/(?<=[ \t\n])#(\S+)/) do |m|
       m = m.shift
       if m[-1] !~ /[a-zA-Z0-9]/
         # Then the last char is a symbol or punctuation, and we should wipe it
