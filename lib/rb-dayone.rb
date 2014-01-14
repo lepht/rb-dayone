@@ -64,7 +64,8 @@ module DayOne
 end
 
 
-Dir[File.join(lib_root, "rb-dayone", "*.rb")].each{ |f| require f }
+Dir[File.join(lib_root, "rb-dayone/*.rb")].each{ |f| require f }
+Dir[File.join(lib_root, "rb-dayone/search_engines/*.rb")].each{ |f| require f }
 
 # Default values
 DayOne::dayone_folder = File.join(ENV['HOME'], '.rb-dayone')

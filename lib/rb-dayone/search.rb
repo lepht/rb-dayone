@@ -2,85 +2,22 @@
 # Create this object with Search.new. Give it some parameters to search for, then
 # use Search#[] to access results.
 class DayOne::Search
-  
-  # The entry must include this text
-  attr_accessor :entry_text
-  
-  # The entry must be starred
-  attr_accessor :starred
-
-  # The entry must have this tag
-  attr_accessor :tag
-
-  # The entry must have been created after this time
-  attr_accessor :creation_date_after
-
-  # The entry must have been created before this time
-  attr_accessor :creation_date_before
-  
-  # Initialize the search. Currently you can search by:
-  # * entry text
-  # * starred status
-  # * tag
-  # * creation date (before and after)
-  def initialize(entry_text:nil, starred:nil, tag:nil,
-    creation_date_before:nil, creation_date_after:nil)
-
-    @entry_text           = entry_text
-    @starred              = starred
-    @tag                  = tag
-    @creation_date_before = creation_date_before
-    @creation_date_after  = creation_date_after
+    
+  # Initialize the search. Takes a block, which allows
+  # access to an array of +SearchEngine+ subclasses.
+  def initialize &blck
+    instance_eval(&blck) if block_given?
   end
 
-  # Fetch the results by searching. Uses a cached version of the DayOne database.
+  # Fetch the results by searching.
   # @return [Array] all entries matching your results
   def results
     if !@results
-      @results = []
-      # We grub through results because scanning through Nokogiri takes ages
+      # Fetch files + data
       @results = DayOne::entries.each_with_object({}){ |file, hash| hash[file] = File.read(file) }
-      
-      file_must_include = [entry_text, tag].compact
-      @results = @results.select{ |k,v| file_must_include.all?{ |str| v.include?(str) } }
 
-      # These are the checks on our entries
-      verification_blocks = []
-
-      verification_blocks << lambda do |v|
-        v =~ %r|<key>Entry Text</key>\s+<string>(.*?)</string>|m && $1.include?(entry_text)
-      end if entry_text
-
-      verification_blocks << lambda do |v|
-        v =~ %r|<key>Tags</key>\s+<array>(.*?)</array>|m && $1.include?("<string>#{tag}</string>")
-      end if tag
-
-      if !starred.nil?
-        verification_blocks << if starred
-          lambda{ |v| v =~ %r|<key>Starred</key>\s+<true/>| }
-        else
-          lambda{ |v| v =~ %r|<key>Starred</key>\s+<false/>| }
-        end
-      end
-
-      if creation_date_after && creation_date_before
-        verification_blocks << lambda do |v|
-          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
-          t && t.between?(creation_date_after, creation_date_before)
-        end
-      elsif creation_date_after
-        verification_blocks << lambda do |v|
-          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
-          t && t > creation_date_after
-        end
-      elsif creation_date_before
-        verification_blocks << lambda do |v|
-          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
-          t && t < creation_date_before
-        end
-      end
-
-      @results = @results.select{ |k,v| verification_blocks.all?{ |b| b[v] } }
+      search_engines = self.active_search_engines
+      @results = @results.select{ |k,v| search_engines.all?{ |se| se.matches?(v) }}
       @results = @results.map{ |file,data| DayOne::EntryImporter.new(data,file).to_entry }
     end
     @results
@@ -91,5 +28,31 @@ class DayOne::Search
   # @return [DayOne::Entry] the entry
   def [] index
     results[index]
+  end
+
+  # entry_text search engine
+  def entry_text
+    @entry_text ||= DayOne::EntryTextSearch.new
+  end
+
+  # starred search engine
+  def starred
+    @starred ||= DayOne::StarredSearch.new
+  end
+
+  # Tags search engine
+  def tag
+    @tag ||= DayOne::TagSearch.new
+  end
+
+  # Creation date search engine
+  def creation_date
+    @creation_date ||= DayOne::CreationDateSearch.new
+  end
+
+  # Returns an array of search engines which are defined and will actually do
+  # filtering.
+  def active_search_engines
+    [@entry_text, @starred, @tag, @creation_date].compact
   end
 end
