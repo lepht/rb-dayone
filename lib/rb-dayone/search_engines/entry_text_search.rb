@@ -22,6 +22,9 @@ class DayOne::EntryTextSearch < DayOne::SearchEngine
   def matches? string
     entry_text = string[%r|<key>Entry Text</key>\s+<string>(.*?)</string>|m,1]
 
+    # Edge case: no entry text
+    return true if entry_text.nil? && @include.empty?
+
     return (entry_text &&
       @include.all?{ |s| entry_text.include?(s) } &&
       @exclude.all?{ |s| !entry_text.include?(s) }
