@@ -35,6 +35,10 @@ Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via emai
 
 ## History
 
+### 0.6.1 / 2014-01-13
+
+* [FIXED] Updated gem versions
+
 ### 0.6.0 / 2013-01-14
 
 * [NEW] Location support

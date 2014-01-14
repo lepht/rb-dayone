@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.executables << 'dayone'
 
   
-  s.add_runtime_dependency 'builder', '~> 2.0'
+  s.add_runtime_dependency 'builder', '~> 3.1.0'
   s.add_runtime_dependency 'commander', '~> 4.1.2'
-  s.add_runtime_dependency 'libxml-ruby', '~> 2.3.3'
-  s.add_runtime_dependency 'nokogiri', '~> 1.5.0'
+  s.add_runtime_dependency 'libxml-ruby', '~> 2.7.0'
+  s.add_runtime_dependency 'nokogiri', '~> 1.6.0'
 end
