@@ -6,6 +6,8 @@ class DayOne::Entry
 
   # The date of the journal entry
   attr_accessor :creation_date
+  alias_method :created_at, :creation_date
+  alias_method :created_at=, :creation_date=
   
   # The journal entry's body text
   attr_accessor :entry_text
@@ -73,6 +75,8 @@ class DayOne::Entry
       tag m
     end
   end
+
+  alias_method :auto_tag, :add_tags_from_entry_text
   
   # The same as calling Entry#saved
   def saved?

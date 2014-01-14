@@ -35,6 +35,10 @@ Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via emai
 
 ## History
 
+### 0.7.0 / 2014-01-14
+
+* [NEW] Use `Entry#created_at` for `Entry#creation_date`, `Entry#auto_tag` for `Entry#add_tags_from_entry_text`
+
 ### 0.6.1 / 2014-01-13
 
 * [FIXED] Updated gem versions

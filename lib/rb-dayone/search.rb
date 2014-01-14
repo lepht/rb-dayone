@@ -1,6 +1,6 @@
 # A search of the database.
 # Create this object with Search.new. Give it some parameters to search for, then
-# simple use Search#[] to access results.
+# use Search#[] to access results.
 class DayOne::Search
   
   # The entry must include this text
@@ -11,22 +11,26 @@ class DayOne::Search
 
   # The entry must have this tag
   attr_accessor :tag
+
+  # The entry must have been created after this time
+  attr_accessor :creation_date_after
+
+  # The entry must have been created before this time
+  attr_accessor :creation_date_before
   
   # Initialize the search. Currently you can search by:
   # * entry text
   # * starred status
   # * tag
-  # 
-  # These can be passed in via hash.
-  # @param [Hash] hash a hash of search criteria, including:
-  #   * +:entry_text+ -  Text that the entry must include
-  #   * +:starred+ - whether the entry is starred or not
-  #   * +:tag+ - a tag that the entry must have
-  def initialize hash={}
-    hash.each do |k,v|
-      setter = "#{k}="
-      self.send(setter, v) if self.respond_to?(setter)
-    end
+  # * creation date (before and after)
+  def initialize(entry_text:nil, starred:nil, tag:nil,
+    creation_date_before:nil, creation_date_after:nil)
+
+    @entry_text           = entry_text
+    @starred              = starred
+    @tag                  = tag
+    @creation_date_before = creation_date_before
+    @creation_date_after  = creation_date_after
   end
 
   # Fetch the results by searching. Uses a cached version of the DayOne database.
@@ -34,13 +38,50 @@ class DayOne::Search
   def results
     if !@results
       @results = []
-      working_results = cache
-
-      working_results = working_results.select{ |e| e.entry_text.include? entry_text } unless entry_text.nil?
-      working_results = working_results.select{ |e| e.starred == starred } unless starred.nil?
-      working_results = working_results.select{ |e| e.tags.include? tag } unless tag.nil?
+      # We grub through results because scanning through Nokogiri takes ages
+      @results = DayOne::entries.each_with_object({}){ |file, hash| hash[file] = File.read(file) }
       
-      @results = working_results
+      file_must_include = [entry_text, tag].compact
+      @results = @results.select{ |k,v| file_must_include.all?{ |str| v.include?(str) } }
+
+      # These are the checks on our entries
+      verification_blocks = []
+
+      verification_blocks << lambda do |v|
+        v =~ %r|<key>Entry Text</key>\s+<string>(.*?)</string>|m && $1.include?(entry_text)
+      end if entry_text
+
+      verification_blocks << lambda do |v|
+        v =~ %r|<key>Tags</key>\s+<array>(.*?)</array>|m && $1.include?("<string>#{tag}</string>")
+      end if tag
+
+      if !starred.nil?
+        verification_blocks << if starred
+          lambda{ |v| v =~ %r|<key>Starred</key>\s+<true/>| }
+        else
+          lambda{ |v| v =~ %r|<key>Starred</key>\s+<false/>| }
+        end
+      end
+
+      if creation_date_after && creation_date_before
+        verification_blocks << lambda do |v|
+          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
+          t && t.between?(creation_date_after, creation_date_before)
+        end
+      elsif creation_date_after
+        verification_blocks << lambda do |v|
+          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
+          t && t > creation_date_after
+        end
+      elsif creation_date_before
+        verification_blocks << lambda do |v|
+          t = Time.parse v[%r|<key>Creation Date</key>\s+<date>(.*?)</date>|]
+          t && t < creation_date_before
+        end
+      end
+
+      @results = @results.select{ |k,v| verification_blocks.all?{ |b| b[v] } }
+      @results = @results.map{ |file,data| DayOne::EntryImporter.new(data,file).to_entry }
     end
     @results
   end

@@ -38,7 +38,7 @@ module DayOne
     
     # The location of the DayOne journal file as determined by
     # the DayOne plist file stored in +~/Library/Preferences+.
-    # @return [String] the DayONe journal location
+    # @return [String] the DayOne journal location
     def auto_journal_location
       @auto_journal_location ||= File.expand_path(plist_reader.journal_location)
     end
