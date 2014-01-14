@@ -71,6 +71,13 @@ class DayOne::Entry
     @tags << str.to_s
   end
 
+  alias_method :add_tag, :tag
+
+  # Remove a tag from the entry
+  def remove_tag str
+    @tags.delete(str)
+  end
+
   # Searches the entry text for tags (#foo) and adds them to the entry's tags.
   # Only recognises letters, numbers and underscores in tags.
   def add_tags_from_entry_text
