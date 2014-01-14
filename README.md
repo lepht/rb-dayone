@@ -21,6 +21,30 @@ When you're ready to save your entry, just run the `create!` method:
 
     e.create!
 
+### Searching
+
+You can now search your DayOne archives. Use the `DayOne::Search` object to start a search:
+
+    s = DayOne::Search.new
+    s.entry_text = "foo"      # Will find all entries with the word "foo" in them.
+    s.starred = true          # Will find all starred entries
+    s.starred = false         # Will find all unstarred entries
+    s.starred = nil           # Doesn't care about stars any more
+    s.tag = "log"             # Finds entries tagged "log"
+    s.creation_date_after(t)  # Finds entries after the time `t`
+    s.creation_date_before(t)  # Finds entries after the time `t`
+
+You can apply multiple criteria - the object will only return entries that match every criterion you give it. You cannot apply multiple criteria of the same type, e.g.:
+
+    s = DayOne::Search.new
+    s.entry_text = "foo"
+    s.entry_text = "bar"
+    # This will not return all entries containing "foo" and "bar"
+
+To retrieve your entries:
+
+    s.results # Array of DayOne entries
+
 ## Binary
 
 Rb-dayone ships with a binary, `dayone`. Run `dayone --help` for instructions on how to use it.
@@ -38,6 +62,7 @@ Original author: [Jan-Yves Ruzicka](http://www.1klb.com). Get in touch [via emai
 ### 0.7.0 / 2014-01-14
 
 * [NEW] Use `Entry#created_at` for `Entry#creation_date`, `Entry#auto_tag` for `Entry#add_tags_from_entry_text`
+* [NEW] Search!
 
 ### 0.6.1 / 2014-01-13
 
