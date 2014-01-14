@@ -50,6 +50,8 @@ class DayOne::EntryImporter
 
   private
 
+  # TODO Import images
+
   # Process an XML tag. Returns a the value of the tag as a ruby value.
   # @param [Nokogiri::XML::Element] element The element to process
   # @return The values contained within the element

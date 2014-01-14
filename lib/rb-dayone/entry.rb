@@ -56,6 +56,11 @@ class DayOne::Entry
     @uuid ||= `uuidgen`.gsub('-','').strip
   end
 
+  # The file where this entry should/will be saved
+  def file
+    @file ||= File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
+  end
+
   # Add a tag to the entry
   # @param [String] str The string tag to add to the list.
   def tag str
@@ -78,7 +83,8 @@ class DayOne::Entry
 
   alias_method :auto_tag, :add_tags_from_entry_text
   
-  # The same as calling Entry#saved
+  # The same as calling Entry#saved. Tells you if this entry has been saved to
+  # file yet.
   def saved?
     saved
   end
@@ -128,14 +134,22 @@ class DayOne::Entry
   # @return [Boolean] true if the operation was successful.
   def create!
     xml = self.to_xml
-    file_location = File.join(DayOne::journal_location,'entries',"#{uuid}.doentry")
-    File.open(file_location,'w'){ |io| io << xml }
+    File.open(self.file,'w'){ |io| io << xml }
     if image
       new_image_path = File.join(DayOne::journal_location, 'photos', "#{uuid}.jpg")
       FileUtils.cp(image, new_image_path)
       @image = new_image_path
     end
     return true
+  end
+
+  alias_method :save!, :create!
+
+  # Deletes the .doentry file of this entry. This will remove the entry from
+  # your database, although you can reinstate it by calling +#save!+ on this
+  # object.
+  def delete!
+    FileUtils::rm self.file
   end
   
   # Check to make sure that we output valid xml
