@@ -56,9 +56,7 @@ class DayOne::EntryImporter
   def process_value element
     case element.name
     when 'date'
-      if element.content =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/
-          Time.utc($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i)
-        end
+      Time.parse(element.content)
     when 'string'
       element.content
     when 'real'
