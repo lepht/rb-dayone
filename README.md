@@ -10,6 +10,7 @@ You can create an entry pretty simply:
   
 You can also set up other values via a hash:
 
+
     e = DayOne::Entry.new "I totally posted this an hour ago", creation_date: Time.now-3600
 
 Otherwise, you can set values using simple accessor methods, as you'd expect:
